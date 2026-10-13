@@ -519,7 +519,9 @@ pub fn social_icons(ui: &mut Ui, size: f32) {
 /// An app's name as the site sets it: Archivo, with "Craft" in the app's colour.
 pub fn wordmark(ui: &mut Ui, app: &artcraft_launcher_core::CraftApp, size: f32) -> Response {
     let t = Tokens::get(ui.ctx());
-    let (prefix, craft) = app.name.strip_suffix("Craft").map_or((app.name, ""), |p| (p, "Craft"));
+    // The catalog's name in the UI language (ar.tsv has the Arabic names); no "Craft" to colour there.
+    let name = crate::i18n::tr_ctx(crate::i18n::current(), app.id, app.name);
+    let (prefix, craft) = name.strip_suffix("Craft").map_or((name, ""), |p| (p, "Craft"));
     let mut job = egui::text::LayoutJob::default();
     let format = |color| egui::TextFormat {
         font_id: egui::FontId::new(size, theme::display()),

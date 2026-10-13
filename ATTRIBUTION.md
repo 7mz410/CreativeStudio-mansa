@@ -38,6 +38,7 @@ The launcher shows each Creative Studio app with its own star icon, copied from 
 | `assets/app-icons/muhandes.png` | CADCraft fork app icon (the star on a white tile), 128 px | Hamza Abu Ayyash (Creative Studio) | [`7mz410/CreativeStudio-muhandes`](https://github.com/7mz410/CreativeStudio-muhandes) `assets/app-icon/hicolor/128x128/apps/` (the fork's own icon), copied unmodified | MIT OR Apache-2.0 |
 | `assets/app-icons/7rrek.png` | 7rrek app icon (the star on a white tile), 128 px | Hamza Abu Ayyash (Creative Studio) | Rendered for this fork from `logos/Creative_Studio/7rrek.svg` on the navy tile used by the other apps | MIT OR Apache-2.0 |
 | `assets/app-icons/aswat.png` | aswat fork app icon (the star on a white tile), 128 px | Hamza Abu Ayyash (Creative Studio) | [`7mz410/CreativeStudio-aswat`](https://github.com/7mz410/CreativeStudio-aswat) `assets/app-icon/hicolor/128x128/apps/` (the fork's own icon), copied unmodified | MIT OR Apache-2.0 |
+| `assets/app-icons/al7an.png` | al7an app icon (the star on a white tile), 128 px | Hamza Abu Ayyash (Creative Studio) | [`7mz410/CreativeStudio-al7an`](https://github.com/7mz410/CreativeStudio-al7an) `assets/app-icon/hicolor/128x128/apps/` (the fork's own icon), copied unmodified | MIT OR Apache-2.0 |
 
 ## Documentation and README
 

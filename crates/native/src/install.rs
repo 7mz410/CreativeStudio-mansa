@@ -747,6 +747,7 @@ pub(crate) mod linux {
             "muhandes" => include_bytes!("../../../assets/app-icons/muhandes.png"),
             "7rrek" => include_bytes!("../../../assets/app-icons/7rrek.png"),
             "aswat" => include_bytes!("../../../assets/app-icons/aswat.png"),
+            "al7an" => include_bytes!("../../../assets/app-icons/al7an.png"),
             _ => return None,
         })
     }

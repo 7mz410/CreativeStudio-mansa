@@ -197,6 +197,14 @@ fn product_names_stay_in_english() {
 }
 
 #[test]
+fn complete_catalogs_translate_every_app_name() {
+    let ar = Lang::all().find(|l| l.code() == "ar").unwrap();
+    for app in &artcraft_launcher_core::SUITE {
+        assert_ne!(super::tr_ctx(ar, app.id, app.name), app.name, "ar: {}", app.id);
+    }
+}
+
+#[test]
 fn arabic_shows_the_arabic_launcher_name() {
     let ar = Lang::all().find(|l| l.code() == "ar").unwrap();
     assert_eq!(tr(ar, "Mansa"), "المنصّة");

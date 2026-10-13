@@ -32,7 +32,7 @@ const fn feature(title: &'static str, text: &'static str) -> Feature {
 /// Where every Craft App runs (getartcraft.com lists the same for each of them).
 const PLATFORMS: &str = "macOS, Windows, Linux, FreeBSD, web";
 
-pub const DETAILS: [AppDetails; 13] = [
+pub const DETAILS: [AppDetails; 14] = [
     AppDetails {
         id: "tlween",
         headline: "The image editor you already know how to use.",
@@ -291,6 +291,21 @@ pub const DETAILS: [AppDetails; 13] = [
             feature("Editing", "Shuffle, Slip, Spot and Grid modes, with the usual selection, trim and pencil tools."),
             feature("Mixing", "Faders, pan and sends, busses and automation, with built-in EQ, compressor and limiter."),
             feature("Audio files", "WAV, AIFF, FLAC, MP3, Ogg Vorbis and AAC audio files, and bounce to 16, 24 or 32-bit float."),
+        ],
+        platforms: PLATFORMS,
+    },
+    AppDetails {
+        id: "al7an",
+        headline: "Free, open-source music production.",
+        about: "Music production from the Creative Studio suite, free and open source. al7an is a fork of \
+                SoundCraft, the open-source music app by the ArtCraft team, with the Creative Studio identity \
+                and an Arabic interface laid out right to left.\n\n\
+                Almost everything that makes al7an work is SoundCraft's work.",
+        features: &[
+            feature("Open source", "Code under MIT OR Apache-2.0, like upstream SoundCraft."),
+            feature("Built on SoundCraft", "A fork of SoundCraft by the ArtCraft team and its contributors."),
+            feature("Arabic interface", "The interface is laid out right to left, in Arabic."),
+            feature("Creative Studio", "Part of the Creative Studio suite, with the same identity as its other apps."),
         ],
         platforms: PLATFORMS,
     },

@@ -1,4 +1,4 @@
-//! The Creative Studio suite: the thirteen apps the launcher knows about.
+//! The Creative Studio suite: the fourteen apps the launcher knows about.
 //!
 //! The list is data so a later version can fetch it from an API; [`SUITE`] is the built-in copy.
 //!
@@ -98,9 +98,9 @@ const fn app(
     CraftApp { id, name, tagline, group, color, ink_light, ink_dark, repo, former_ids: &[], former_names: &[] }
 }
 
-/// The Creative Studio suite: the thirteen apps the launcher knows about.
+/// The Creative Studio suite: the fourteen apps the launcher knows about.
 /// Ids and names are the Creative Studio slugs; each `repo` is that app's fork under 7mz410.
-pub const SUITE: [CraftApp; 13] = [
+pub const SUITE: [CraftApp; 14] = [
     app(
         "tlween",
         "tlween",
@@ -205,6 +205,14 @@ pub const SUITE: [CraftApp; 13] = [
         [[0xeb, 0x1b, 0x3c], [0xeb, 0x1b, 0x3c], [0xeb, 0x1b, 0x3c]],
         "7mz410/CreativeStudio-aswat",
     ),
+    app(
+        "al7an",
+        "al7an",
+        "Music production",
+        AppGroup::New,
+        [[0xeb, 0x1b, 0x3c], [0xeb, 0x1b, 0x3c], [0xeb, 0x1b, 0x3c]],
+        "7mz410/CreativeStudio-al7an",
+    ),
 ];
 
 /// Creative Studio's website.
@@ -236,9 +244,9 @@ mod tests {
     use super::*;
 
     #[test]
-    fn suite_has_seven_classic_and_six_new_apps_with_unique_ids() {
+    fn suite_has_seven_classic_and_seven_new_apps_with_unique_ids() {
         assert_eq!(SUITE.iter().filter(|a| a.group == AppGroup::Classic).count(), 7);
-        assert_eq!(SUITE.iter().filter(|a| a.group == AppGroup::New).count(), 6);
+        assert_eq!(SUITE.iter().filter(|a| a.group == AppGroup::New).count(), 7);
         let mut ids: Vec<_> = SUITE.iter().map(|a| a.id).collect();
         ids.sort_unstable();
         ids.dedup();
@@ -258,6 +266,7 @@ mod tests {
     fn bundle_ids_are_creative_studio() {
         assert_eq!(CraftApp::by_id("klmat").unwrap().bundle_id(), "ps.creative.studio.klmat");
         assert_eq!(CraftApp::by_id("aswat").unwrap().bundle_id(), "ps.creative.studio.aswat");
+        assert_eq!(CraftApp::by_id("al7an").unwrap().bundle_id(), "ps.creative.studio.al7an");
         assert_eq!(LAUNCHER.bundle_id(), "ai.storyteller.artcraft-launcher");
     }
 }

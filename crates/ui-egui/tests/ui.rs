@@ -555,8 +555,8 @@ fn links_to_the_website_github_and_each_apps_pages() {
     // Cards: every app links to its repo and to its own page on getartcraft.com (plus the footer's).
     let shown_cards = h.query_all_by_label("GitHub").count() - 1;
     let shown_sites = h.query_all_by_label("Website").count() - 1;
-    assert!(shown_cards >= 13, "{shown_cards}");
-    assert_eq!(shown_sites, 13, "every app has a website page");
+    assert!(shown_cards >= 14, "{shown_cards}");
+    assert_eq!(shown_sites, 14, "every app has a website page");
     // The table's … menu has the app's website and GitHub repo.
     let (mut h, _) = harness(ViewMode::Table, egui::Theme::Dark, true);
     h.run_steps(6);
