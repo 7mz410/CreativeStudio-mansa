@@ -44,4 +44,3 @@ The launcher shows each Creative Studio app with its own star icon, copied from 
 | Path | Title | Author | Source | License |
 |---|---|---|---|---|
 
-> Open item: `packaging/macos/dmg/` still carries the ArtCraft mark (upstream `docs/brand/`, now removed). It must be replaced before any DMG is built.

@@ -1,0 +1,24 @@
+# Creative Studio release for mansa (the launcher): a tag push builds the unsigned packages for
+# macOS, Windows and Linux through rsm's reusable build-release.yml. The asset stem stays
+# artcraft-launcher, the name the launcher's self-update looks for (crates/core/src/catalog.rs).
+name: Studio release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: read
+
+jobs:
+  release:
+    name: Release mansa
+    permissions:
+      contents: write
+    uses: 7mz410/CreativeStudio-rsm/.github/workflows/build-release.yml@main
+    with:
+      app: artcraft-launcher
+      package: artcraft-launcher
+      version_var: ARTCRAFT_LAUNCHER_VERSION
+      bundle: Mansa.app
+      tag: ${{ github.ref_name }}
