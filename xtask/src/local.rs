@@ -19,18 +19,18 @@ use std::time::{SystemTime, UNIX_EPOCH};
 
 /// Every Craft App: (id = folder name, display name). Keep in step with `catalog::SUITE`.
 const APPS: &[(&str, &str)] = &[
-    ("photocraft", "PhotoCraft"),
-    ("vectorcraft", "VectorCraft"),
-    ("filmcraft", "FilmCraft"),
-    ("lightcraft", "LightCraft"),
-    ("pdfcraft", "PdfCraft"),
-    ("effectcraft", "EffectCraft"),
-    ("designcraft", "DesignCraft"),
-    ("wordcraft", "WordCraft"),
-    ("deckcraft", "DeckCraft"),
-    ("gridcraft", "GridCraft"),
-    ("cadcraft", "CADCraft"),
-    ("soundcraft", "SoundCraft"),
+    ("tlween", "tlween"),
+    ("rsm", "rsm"),
+    ("tsweer", "tsweer"),
+    ("lamasat", "lamasat"),
+    ("sf7aat", "sf7aat"),
+    ("effectat", "effectat"),
+    ("trteeb", "trteeb"),
+    ("klmat", "klmat"),
+    ("3urood", "3urood"),
+    ("arqam", "arqam"),
+    ("muhandes", "muhandes"),
+    ("7rrek", "7rrek"),
 ];
 
 const DEFAULT_PORT: u16 = 8787;
@@ -699,18 +699,18 @@ mod tests {
     #[test]
     fn writes_a_feed_the_launcher_reads() {
         let mirror = std::env::temp_dir().join(format!("xtask-local-{}", std::process::id()));
-        let dir = mirror.join("photocraft").join("0.6.0");
+        let dir = mirror.join("tlween").join("0.6.0");
         std::fs::create_dir_all(&dir).unwrap();
-        std::fs::write(dir.join("photocraft-0.6.0-macos-aarch64.dmg"), b"dmg").unwrap();
-        std::fs::write(dir.join(SUMS), format!("{}  photocraft-0.6.0-macos-aarch64.dmg\n", "ab".repeat(32))).unwrap();
+        std::fs::write(dir.join("tlween-0.6.0-macos-aarch64.dmg"), b"dmg").unwrap();
+        std::fs::write(dir.join(SUMS), format!("{}  tlween-0.6.0-macos-aarch64.dmg\n", "ab".repeat(32))).unwrap();
         std::fs::write(dir.join(NOTES), "Built \"locally\".\n").unwrap();
         // Unfinished builds are invisible.
-        std::fs::create_dir_all(mirror.join("photocraft").join("0.7.0")).unwrap();
+        std::fs::create_dir_all(mirror.join("tlween").join("0.7.0")).unwrap();
         std::fs::write(dir.join(COMPLETE), "").unwrap();
         let json = feed(&mirror, "http://127.0.0.1:8787/");
         let _ = std::fs::remove_dir_all(&mirror);
         assert!(json.contains(r#""tag":"v0.6.0""#), "{json}");
-        assert!(json.contains(r#""download_url":"http://127.0.0.1:8787/photocraft/0.6.0/photocraft-0.6.0-macos-aarch64.dmg""#));
+        assert!(json.contains(r#""download_url":"http://127.0.0.1:8787/tlween/0.6.0/tlween-0.6.0-macos-aarch64.dmg""#));
         assert!(json.contains(r#""size_bytes":3"#) && json.contains(&"ab".repeat(32)));
         assert!(json.contains(r#"Built \"locally\".\n"#));
         assert!(!json.contains("0.7.0"));
@@ -742,7 +742,7 @@ mod tests {
 
     #[test]
     fn only_plain_names_are_served() {
-        assert!(safe_name("photocraft-0.6.0-macos-universal.dmg"));
+        assert!(safe_name("tlween-0.6.0-macos-universal.dmg"));
         for bad in ["", ".", "..", "a/b", "a\\b", "a%2e"] {
             assert!(!safe_name(bad), "{bad}");
         }

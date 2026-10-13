@@ -1,7 +1,7 @@
 //! Platforms, package formats, and choosing the right release asset.
 //!
 //! Every Craft App release names its files `<app>-<version>-<os>-<arch>[-portable].<ext>`, for
-//! example `photocraft-0.5.0-windows-x64.msi` or `photocraft-0.5.0-linux-aarch64.AppImage`.
+//! example `tlween-0.5.0-windows-x64.msi` or `tlween-0.5.0-linux-aarch64.AppImage`.
 //!
 //! Labels are English. The UI translates [`PackageKind::label`]; OS and architecture names are
 //! shown as they are.
@@ -236,107 +236,104 @@ mod tests {
     }
 
     const PHOTO: &[&str] = &[
-        "photocraft-0.5.0-freebsd-x86_64.tar.gz",
-        "photocraft-0.5.0-linux-aarch64.AppImage",
-        "photocraft-0.5.0-linux-aarch64.AppImage.zsync",
-        "photocraft-0.5.0-linux-aarch64.deb",
-        "photocraft-0.5.0-linux-riscv64.tar.gz",
-        "photocraft-0.5.0-linux-x86_64.AppImage",
-        "photocraft-0.5.0-linux-x86_64.tar.gz",
-        "photocraft-0.5.0-macos-universal.dmg",
-        "photocraft-0.5.0-windows-x64-portable.zip",
-        "photocraft-0.5.0-windows-x64.msi",
-        "photocraft-0.5.0-windows-x86.msi",
-        "photocraft-cli-0.5.0-macos-universal.zip",
-        "photocraft-web-0.5.0.zip",
+        "tlween-0.5.0-freebsd-x86_64.tar.gz",
+        "tlween-0.5.0-linux-aarch64.AppImage",
+        "tlween-0.5.0-linux-aarch64.AppImage.zsync",
+        "tlween-0.5.0-linux-aarch64.deb",
+        "tlween-0.5.0-linux-riscv64.tar.gz",
+        "tlween-0.5.0-linux-x86_64.AppImage",
+        "tlween-0.5.0-linux-x86_64.tar.gz",
+        "tlween-0.5.0-macos-universal.dmg",
+        "tlween-0.5.0-windows-x64-portable.zip",
+        "tlween-0.5.0-windows-x64.msi",
+        "tlween-0.5.0-windows-x86.msi",
+        "tlween-cli-0.5.0-macos-universal.zip",
+        "tlween-web-0.5.0.zip",
         "SHA256SUMS.txt",
     ];
 
     #[test]
     fn reads_asset_names() {
-        let n = parse_asset_name("photocraft-0.2.0-rc.1-windows-arm64-portable.zip", &["photocraft"]).unwrap();
+        let n = parse_asset_name("tlween-0.2.0-rc.1-windows-arm64-portable.zip", &["tlween"]).unwrap();
         assert_eq!((n.version.as_str(), n.token.as_str(), n.kind), ("0.2.0-rc.1", "windows-arm64", PackageKind::PortableZip));
-        let n = parse_asset_name("printcraft-0.2.1-linux-x86_64.tar.gz", &["pdfcraft", "printcraft"]).unwrap();
-        assert_eq!((n.stem.as_str(), n.kind), ("printcraft", PackageKind::TarGz));
-        for other in
-            ["photocraft-cli-0.5.0-macos-universal.zip", "photocraft-web-0.5.0.zip", "SHA256SUMS.txt", "photocraft-0.5.0-linux-x86_64.AppImage.zsync"]
-        {
-            assert_eq!(parse_asset_name(other, &["photocraft"]), None, "{other}");
+        let n = parse_asset_name("sf7aat-0.2.1-linux-x86_64.tar.gz", &["sf7aat", "sf7aat"]).unwrap();
+        assert_eq!((n.stem.as_str(), n.kind), ("sf7aat", PackageKind::TarGz));
+        for other in ["tlween-cli-0.5.0-macos-universal.zip", "tlween-web-0.5.0.zip", "SHA256SUMS.txt", "tlween-0.5.0-linux-x86_64.AppImage.zsync"] {
+            assert_eq!(parse_asset_name(other, &["tlween"]), None, "{other}");
         }
     }
 
     #[test]
     fn picks_the_native_build_first_and_falls_back_to_emulation() {
         let r = release(PHOTO);
-        let pick = |os, arch, kinds: &[PackageKind]| pick_asset(&r, &["photocraft"], Platform { os, arch }, kinds).map(|(a, _)| a.name.clone());
-        assert_eq!(pick(Os::MacOs, Arch::Arm64, &[PackageKind::Dmg]).as_deref(), Some("photocraft-0.5.0-macos-universal.dmg"));
-        assert_eq!(pick(Os::Windows, Arch::X64, &[PackageKind::Msi]).as_deref(), Some("photocraft-0.5.0-windows-x64.msi"));
+        let pick = |os, arch, kinds: &[PackageKind]| pick_asset(&r, &["tlween"], Platform { os, arch }, kinds).map(|(a, _)| a.name.clone());
+        assert_eq!(pick(Os::MacOs, Arch::Arm64, &[PackageKind::Dmg]).as_deref(), Some("tlween-0.5.0-macos-universal.dmg"));
+        assert_eq!(pick(Os::Windows, Arch::X64, &[PackageKind::Msi]).as_deref(), Some("tlween-0.5.0-windows-x64.msi"));
         // No arm64 MSI in this release: Windows on ARM runs the x64 build.
-        assert_eq!(pick(Os::Windows, Arch::Arm64, &[PackageKind::Msi]).as_deref(), Some("photocraft-0.5.0-windows-x64.msi"));
-        assert_eq!(pick(Os::Linux, Arch::Arm64, &[PackageKind::AppImage]).as_deref(), Some("photocraft-0.5.0-linux-aarch64.AppImage"));
+        assert_eq!(pick(Os::Windows, Arch::Arm64, &[PackageKind::Msi]).as_deref(), Some("tlween-0.5.0-windows-x64.msi"));
+        assert_eq!(pick(Os::Linux, Arch::Arm64, &[PackageKind::AppImage]).as_deref(), Some("tlween-0.5.0-linux-aarch64.AppImage"));
         assert_eq!(pick(Os::Linux, Arch::Arm64, &[PackageKind::TarGz]), None);
-        assert_eq!(pick(Os::Linux, Arch::Riscv64, &[PackageKind::TarGz]).as_deref(), Some("photocraft-0.5.0-linux-riscv64.tar.gz"));
-        assert_eq!(pick(Os::FreeBsd, Arch::X64, &[PackageKind::TarGz]).as_deref(), Some("photocraft-0.5.0-freebsd-x86_64.tar.gz"));
+        assert_eq!(pick(Os::Linux, Arch::Riscv64, &[PackageKind::TarGz]).as_deref(), Some("tlween-0.5.0-linux-riscv64.tar.gz"));
+        assert_eq!(pick(Os::FreeBsd, Arch::X64, &[PackageKind::TarGz]).as_deref(), Some("tlween-0.5.0-freebsd-x86_64.tar.gz"));
         // Preference order across kinds.
         assert_eq!(
             pick(Os::Windows, Arch::X64, &[PackageKind::PortableZip, PackageKind::Msi]).as_deref(),
-            Some("photocraft-0.5.0-windows-x64-portable.zip")
+            Some("tlween-0.5.0-windows-x64-portable.zip")
         );
-        assert_eq!(pick(Os::Windows, Arch::X86, &[PackageKind::PortableZip, PackageKind::Msi]).as_deref(), Some("photocraft-0.5.0-windows-x86.msi"));
+        assert_eq!(pick(Os::Windows, Arch::X86, &[PackageKind::PortableZip, PackageKind::Msi]).as_deref(), Some("tlween-0.5.0-windows-x86.msi"));
 
         let p_riscv = Platform { os: Os::Linux, arch: Arch::Riscv64 };
         assert_eq!(
-            pick_asset(&r, &["photocraft"], p_riscv, p_riscv.default_kinds()).map(|(a, _)| a.name.clone()).as_deref(),
-            Some("photocraft-0.5.0-linux-riscv64.tar.gz")
+            pick_asset(&r, &["tlween"], p_riscv, p_riscv.default_kinds()).map(|(a, _)| a.name.clone()).as_deref(),
+            Some("tlween-0.5.0-linux-riscv64.tar.gz")
         );
         assert_eq!(
-            pick_asset(&r, &["photocraft"], p_riscv, p_riscv.download_kinds()).map(|(a, _)| a.name.clone()).as_deref(),
-            Some("photocraft-0.5.0-linux-riscv64.tar.gz")
+            pick_asset(&r, &["tlween"], p_riscv, p_riscv.download_kinds()).map(|(a, _)| a.name.clone()).as_deref(),
+            Some("tlween-0.5.0-linux-riscv64.tar.gz")
         );
-        let r_riscv_deb =
-            release(&["photocraft-0.5.0-linux-riscv64.tar.gz", "photocraft-0.5.0-linux-riscv64.deb", "photocraft-0.5.0-linux-riscv64.rpm"]);
+        let r_riscv_deb = release(&["tlween-0.5.0-linux-riscv64.tar.gz", "tlween-0.5.0-linux-riscv64.deb", "tlween-0.5.0-linux-riscv64.rpm"]);
         assert_eq!(
-            pick_asset(&r_riscv_deb, &["photocraft"], p_riscv, p_riscv.download_kinds()).map(|(a, _)| a.name.clone()).as_deref(),
-            Some("photocraft-0.5.0-linux-riscv64.deb")
+            pick_asset(&r_riscv_deb, &["tlween"], p_riscv, p_riscv.download_kinds()).map(|(a, _)| a.name.clone()).as_deref(),
+            Some("tlween-0.5.0-linux-riscv64.deb")
         );
     }
 
     #[test]
     fn strictly_matches_architecture_for_all_linux_package_formats() {
         let multi_arch_release = release(&[
-            "photocraft-0.5.0-linux-aarch64.AppImage",
-            "photocraft-0.5.0-linux-x86_64.AppImage",
-            "photocraft-0.5.0-linux-aarch64.deb",
-            "photocraft-0.5.0-linux-x86_64.deb",
-            "photocraft-0.5.0-linux-aarch64.rpm",
-            "photocraft-0.5.0-linux-x86_64.rpm",
-            "photocraft-0.5.0-linux-aarch64.flatpak",
-            "photocraft-0.5.0-linux-x86_64.flatpak",
-            "photocraft-0.5.0-linux-aarch64.tar.gz",
-            "photocraft-0.5.0-linux-x86_64.tar.gz",
+            "tlween-0.5.0-linux-aarch64.AppImage",
+            "tlween-0.5.0-linux-x86_64.AppImage",
+            "tlween-0.5.0-linux-aarch64.deb",
+            "tlween-0.5.0-linux-x86_64.deb",
+            "tlween-0.5.0-linux-aarch64.rpm",
+            "tlween-0.5.0-linux-x86_64.rpm",
+            "tlween-0.5.0-linux-aarch64.flatpak",
+            "tlween-0.5.0-linux-x86_64.flatpak",
+            "tlween-0.5.0-linux-aarch64.tar.gz",
+            "tlween-0.5.0-linux-x86_64.tar.gz",
         ]);
 
         let p_x64 = Platform { os: Os::Linux, arch: Arch::X64 };
         let p_arm64 = Platform { os: Os::Linux, arch: Arch::Arm64 };
 
         for kind in [PackageKind::AppImage, PackageKind::Deb, PackageKind::Rpm, PackageKind::Flatpak, PackageKind::TarGz] {
-            let pick_x64 = pick_asset(&multi_arch_release, &["photocraft"], p_x64, &[kind]).map(|(a, _)| a.name.clone());
+            let pick_x64 = pick_asset(&multi_arch_release, &["tlween"], p_x64, &[kind]).map(|(a, _)| a.name.clone());
             assert!(pick_x64.as_deref().unwrap().contains("linux-x86_64"), "Expected x86_64 asset for {kind:?}, got {pick_x64:?}");
 
-            let pick_arm64 = pick_asset(&multi_arch_release, &["photocraft"], p_arm64, &[kind]).map(|(a, _)| a.name.clone());
+            let pick_arm64 = pick_asset(&multi_arch_release, &["tlween"], p_arm64, &[kind]).map(|(a, _)| a.name.clone());
             assert!(pick_arm64.as_deref().unwrap().contains("linux-aarch64"), "Expected aarch64 asset for {kind:?}, got {pick_arm64:?}");
         }
 
         // On x86_64 Linux, an aarch64-only asset must NEVER match or fall back
         let arm_only_release = release(&[
-            "photocraft-0.5.0-linux-aarch64.AppImage",
-            "photocraft-0.5.0-linux-aarch64.deb",
-            "photocraft-0.5.0-linux-aarch64.rpm",
-            "photocraft-0.5.0-linux-aarch64.flatpak",
-            "photocraft-0.5.0-linux-aarch64.tar.gz",
+            "tlween-0.5.0-linux-aarch64.AppImage",
+            "tlween-0.5.0-linux-aarch64.deb",
+            "tlween-0.5.0-linux-aarch64.rpm",
+            "tlween-0.5.0-linux-aarch64.flatpak",
+            "tlween-0.5.0-linux-aarch64.tar.gz",
         ]);
         for kind in [PackageKind::AppImage, PackageKind::Deb, PackageKind::Rpm, PackageKind::Flatpak, PackageKind::TarGz] {
-            assert_eq!(pick_asset(&arm_only_release, &["photocraft"], p_x64, &[kind]), None, "x86_64 must never match an aarch64 asset for {kind:?}");
+            assert_eq!(pick_asset(&arm_only_release, &["tlween"], p_x64, &[kind]), None, "x86_64 must never match an aarch64 asset for {kind:?}");
         }
     }
 }

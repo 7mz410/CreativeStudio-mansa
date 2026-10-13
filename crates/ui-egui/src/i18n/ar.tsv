@@ -1,0 +1,309 @@
+# Arabic (ar) catalog for Mansa (Mansa), the Creative Studio launcher.
+# Format: context<TAB>source<TAB>translation
+# Empty context = plain UI string (tl!, t).
+# @id = command-id keyed (tr_id).
+# @plural = plural forms: one|other (English) or one|other (Arabic; a dual and the
+#   few/many forms are not separate here, so 2 and 3-10 use the 'other' form).
+# @msg = status/error message template (message, msg).
+# Other context = disambiguation for tr_ctx.
+#
+# Written from the meaning of the English text. The product name is Mansa; "Creative Studio"
+# stays in Latin letters, like the other Creative Studio apps.
+# Coverage: the whole interface (complete_menus = true).
+	Launcher	المشغّل
+	Creative Studio suite	Creative Studio suite
+	Open Source Tools for Creatives, Makers, and Builders	أدوات مفتوحة المصدر للمبدعين والصنّاع والبنّائين
+	Settings	الإعدادات
+	Check for updates	التحقق من التحديثات
+	Grid	شبكة
+	Table	جدول
+	Show apps as cards	عرض التطبيقات كبطاقات
+	Show apps as a table	عرض التطبيقات في جدول
+	All	الكل
+	Updates	التحديثات
+	Not installed	غير مثبّت
+	Search apps	البحث في التطبيقات
+	Sort	ترتيب
+	Suite order	حسب ترتيب الحزمة
+	Name	الاسم
+	Status	الحالة
+	Installed version	الإصدار المثبّت
+	Latest version	آخر إصدار
+	Newest release	أحدث إصدار
+	GitHub	GitHub
+	Website	الموقع
+	Classic apps	التطبيقات الأساسية
+	New apps	التطبيقات الجديدة
+	NEW	جديد
+	Install	تثبيت
+	Update to {v}	تحديث إلى {v}
+	Open	فتح
+	Download for {os}	تنزيل لنظام {os}
+	Download	تنزيل
+	Coming soon	قريباً
+	Checking…	جارٍ التحقق…
+	Not available	غير متاح
+	Offline	غير متصل
+	Downloading {done} of {total}	جارٍ التنزيل: {done} من {total}
+	Downloading…	جارٍ التنزيل…
+	Reconnecting…	جارٍ إعادة الاتصال…
+	Verifying…	جارٍ التحقق من السلامة…
+	Installing, then restarting…	جارٍ التثبيت، ثم إعادة التشغيل…
+	Installing…	جارٍ التثبيت…
+	Removing…	جارٍ الحذف…
+	Pause download	إيقاف التنزيل مؤقتاً
+	Cancel download	إلغاء التنزيل
+	Resume download	متابعة التنزيل
+	Discard download	حذف الملف المُنزَّل
+	Release notes	ملاحظات الإصدار
+	Show in Finder	إظهار في Finder
+	Show in Explorer	إظهار في Explorer
+	Show in Files	إظهار في مدير الملفات
+	Reinstall	إعادة التثبيت
+	Uninstall…	إلغاء التثبيت…
+	All releases	كل الإصدارات
+	Mansa {version} is available.	Mansa {version} متاحة.
+	Dismiss	إغلاق
+	Update and restart	تحديث وإعادة التشغيل
+	A new version is available. Would you like to relaunch with the updated version?	إصدار جديد متاح. هل تريد إعادة التشغيل بالنسخة المحدَّثة؟
+	Later	لاحقاً
+	What's new	ما الجديد
+	No notes were published with this release.	لم تُنشر ملاحظات مع هذا الإصدار.
+	Released {date}	صدر في {date}
+	Open on GitHub	فتح على GitHub
+	Close	إغلاق
+	Mansa {version}	Mansa {version}
+	Only when I ask	عند الطلب فقط
+	Automatically download and install updates	تنزيل التحديثات وتثبيتها تلقائياً
+	Notify me when an installed app has an update	إشعاري عند توفر تحديث لتطبيق مثبّت
+	Include pre-releases (betas and release candidates)	تضمين الإصدارات التجريبية (بيتا ومرشّحات الإصدار)
+	Installing on Linux	التثبيت على لينكس
+	Install new apps as	تثبيت التطبيقات الجديدة كـ
+	System package (recommended)	حزمة النظام (موصى بها)
+	Updates always use the format an app was installed with.	تستخدم التحديثات دائماً الصيغة التي ثُبّت بها التطبيق.
+	Running in the background	العمل في الخلفية
+	Keep running in the tray when the window is closed	البقاء في شريط الإشعارات عند إغلاق النافذة
+	Show the window on the current desktop	إظهار النافذة على سطح المكتب الحالي
+	Start Mansa when I log in	تشغيل Mansa عند تسجيل الدخول
+	Community	المجتمع
+	Questions, ideas and news from the Creative Studio team	أسئلة وأفكار وأخبار من فريق Creative Studio
+	Appearance	المظهر
+	Quit Mansa	إنهاء Mansa
+	Done	تم
+	Uninstall {name}?	إلغاء تثبيت {name}؟
+	The app will be moved to the Trash. Your documents and settings stay.	سيُنقل التطبيق إلى سلة المهملات. ستبقى مستنداتك وإعداداتك.
+	Windows will remove it like any installed program. Your documents and settings stay.	سيزيله Windows مثل أي برنامج مثبّت. ستبقى مستنداتك وإعداداتك.
+	Your system's package manager will remove it, and may ask for your password. Your documents and settings stay.	سيزيله مدير الحزم في نظامك، وقد يطلب كلمة المرور. ستبقى مستنداتك وإعداداتك.
+	The app will be removed. Your documents and settings stay.	سيُحذف التطبيق. ستبقى مستنداتك وإعداداتك.
+	Uninstall	إلغاء التثبيت
+	Cancel	إلغاء
+	Checked {ago}	تم التحقق {ago}
+	just now	الآن
+	yesterday	أمس
+	{month} {day}, {year}	{day} {month} {year}
+	Automatically	تلقائياً
+	Every Craft app	كل تطبيقات Creative Studio
+	Apps on this computer	التطبيقات على هذا الجهاز
+	Installed apps with a newer version	التطبيقات المثبّتة التي توفر لها إصدار أحدث
+	Apps you can install	التطبيقات التي يمكنك تثبيتها
+	Hide App	إخفاء التطبيق
+	Unhide App	إظهار التطبيق
+	Hidden Apps	التطبيقات المخفية
+	Apps you hid	التطبيقات التي أخفيتها
+	Checked {ago} · using {sources}	تم التحقق {ago} · عبر {sources}
+	{a} and {b}	{a} و{b}
+	Learn more	اعرف المزيد
+	Minimize	تصغير
+	Maximize	تكبير
+	Restore	استعادة
+	New	جديد
+	OK	حسناً
+	Open link	فتح الرابط
+	Update	تحديث
+	{name} icon	أيقونة {name}
+	Loading Mansa…	جارٍ تحميل Mansa…
+	Cancel update	إلغاء التحديث
+	Stop waiting; the update can be started again later	إيقاف الانتظار؛ يمكن بدء التحديث لاحقاً
+	Download again	إعادة التنزيل
+	Install cancelled	أُلغي التثبيت
+	Install cancelled. The download is kept for the next try.	أُلغي التثبيت. يُحتفظ بالملف المُنزَّل للمحاولة التالية.
+	Update cancelled	أُلغي التحديث
+	Uninstall cancelled	أُلغي إلغاء التثبيت
+	Retry install	إعادة محاولة التثبيت
+	Retry update to {version}	إعادة محاولة التحديث إلى {version}
+	The download is still here. It's checked again, then installed.	الملف المُنزَّل ما زال موجوداً. سيُتحقق منه مرة أخرى ثم يُثبَّت.
+	Waiting for another app…	جارٍ انتظار تطبيق آخر…
+	Waiting for other installs…	جارٍ انتظار عمليات تثبيت أخرى…
+	Installer (.msi)	مُثبِّت (.msi)
+	Portable (.zip)	نسخة محمولة (.zip)
+	Disk image (.dmg)	صورة قرص (.dmg)
+	Debian package (.deb)	حزمة Debian (.deb)
+	RPM package (.rpm)	حزمة RPM (.rpm)
+	Flatpak bundle	حزمة Flatpak
+	Tarball (.tar.gz)	أرشيف (.tar.gz)
+tlween	Image editing	تحرير الصور
+rsm	Vector illustration	الرسم بالمتجهات
+tsweer	Video editing, color and sound	تحرير الفيديو والألوان والصوت
+lamasat	Photo library and raw development	مكتبة الصور وتحميض ملفات RAW
+sf7aat	Reading, organizing and protecting PDFs	قراءة ملفات PDF وتنظيمها وحمايتها
+effectat	Motion graphics and visual effects	الرسوم المتحركة والمؤثرات البصرية
+trteeb	Page layout and publishing	تنسيق الصفحات والنشر
+klmat	Writing and document design	الكتابة وتصميم المستندات
+3urood	Presentations and slide shows	العروض التقديمية وعروض الشرائح
+arqam	Spreadsheets and data	الجداول الإلكترونية والبيانات
+muhandes	Computer-aided design and drafting	التصميم بمساعدة الحاسوب والرسم الهندسي
+7rrek	Motion and animation	الحركة والرسوم المتحركة
+month	Jan	يناير
+month	Feb	فبراير
+month	Mar	مارس
+month	Apr	أبريل
+month	May	مايو
+month	Jun	يونيو
+month	Jul	يوليو
+month	Aug	أغسطس
+month	Sep	سبتمبر
+month	Oct	أكتوبر
+month	Nov	نوفمبر
+month	Dec	ديسمبر
+	Not checked yet	لم يتم التحقق بعد
+	GitHub's hourly limit was reached; full details return in {min} min	بلغ GitHub حدّه بالساعة؛ تعود التفاصيل الكاملة خلال {min} دقيقة
+	GitHub limit hit; back in {min} min	بلغ GitHub حدّه؛ يعود خلال {min} دقيقة
+	Installing for {platform}	جارٍ التثبيت لنظام {platform}
+	Downloads for {platform}	التنزيلات لنظام {platform}
+	No downloads for this system	لا توجد تنزيلات لهذا النظام
+	Creative Studio on {name}	Creative Studio على {name}
+	Couldn't open {name}: {e}	تعذّر فتح {name}: {e}
+	Download cancelled	أُلغي التنزيل
+	Available to install	متاح للتثبيت
+	Available	متاح
+	Installed · up to date	مثبّت · محدَّث
+	Update available	يتوفر تحديث
+	Installed	مثبّت
+	installed	مثبّت
+	Not available here	غير متاح هنا
+	Updating…	جارٍ التحديث…
+	Update paused	التحديث متوقف مؤقتاً
+	Download paused	التنزيل متوقف مؤقتاً
+	{version} installed → {latest} released	{latest} صادر ← {version} مثبّت
+	Version {version}	الإصدار {version}
+	{installed} installed · latest {latest}	{installed} مثبّت · آخر إصدار {latest}
+	Installed · latest {latest}	مثبّت · آخر إصدار {latest}
+	Version {version} installed	الإصدار {version} مثبّت
+	Version {latest}	الإصدار {latest}
+	No release published yet	لم يُنشر أي إصدار بعد
+	Mansa	Mansa
+	App	التطبيق
+	Latest	الأحدث
+	Released	تاريخ الإصدار
+	Auto	تلقائي
+	Language	اللغة
+	Ascending	تصاعدي
+	Descending	تنازلي
+	Click to reverse the order	انقر لعكس الترتيب
+	Click to sort by this column	انقر للترتيب حسب هذا العمود
+	{done} of {total}	{done} من {total}
+	Downloading	جارٍ التنزيل
+	Verifying checksum…	جارٍ التحقق من المجموع الاختباري…
+	Resume	متابعة
+	{done} of {total} downloaded	تم تنزيل {done} من {total}
+	{done} downloaded	تم تنزيل {done}
+	Checking for updates…	جارٍ التحقق من التحديثات…
+	Downloads the new version, replaces this one and opens it again	ينزّل الإصدار الجديد ويستبدل النسخة الحالية ثم يفتحها من جديد
+	Couldn't check for updates: {f}	تعذّر التحقق من التحديثات: {f}
+	GitHub repository	مستودع GitHub
+	Creative Studio	Creative Studio
+	Update 1 app	تحديث تطبيق واحد
+	Update all ({count})	تحديث الكل ({count})
+	⊞  Grid	⊞  شبكة
+	☰  Table	☰  جدول
+	🔍  Search apps	🔍  البحث في التطبيقات
+	{name} {version}	{name} {version}
+	Match system	حسب النظام
+	Dark	داكن
+	Light	فاتح
+	Full changelog	سجل التغييرات الكامل
+	link	رابط
+	No apps match	لا توجد تطبيقات مطابقة
+	Open Mansa to update.	افتح Mansa للتحديث.
+	{name} {v} is available	يتوفر {name} {v}
+	{count} updates are available	يتوفر {count} تحديثات
+	These notes weren't fetched (GitHub's request limit was reached). They're on the release page.	لم تُحمَّل هذه الملاحظات (بلغ GitHub حد الطلبات). وهي موجودة في صفحة الإصدار.
+	When on, opening the launcher from the menu bar brings its window to the desktop you're on. When off, macOS switches you to the desktop the window was on.	عند التفعيل، يُظهر فتح المشغّل من شريط القوائم نافذته على سطح المكتب الحالي. وعند الإيقاف، يحوّلك macOS إلى سطح المكتب الذي كانت فيه النافذة.
+	Couldn't change the login item: {e}	تعذّر تغيير عنصر بدء التشغيل: {e}
+column	App	التطبيق
+column	Installed	الحالي
+column	Latest	الأحدث
+column	Released	تاريخ الإصدار
+filter	Installed	المثبّتة
+	{name} details	تفاصيل {name}
+@plural	{n} app|{n} apps	{n} تطبيق|{n} تطبيقات
+@plural	{n} min ago|{n} min ago	قبل {n} دقيقة|قبل {n} دقيقة
+@plural	{n} h ago|{n} h ago	قبل {n} ساعة|قبل {n} ساعة
+@plural	{n} day ago|{n} days ago	قبل {n} يوم|قبل {n} يوم
+@msg	Couldn't open {name}: {e}	تعذّر فتح {name}: {e}
+@msg	Download cancelled	أُلغي التنزيل
+@msg	{name} updated to {version}	تم تحديث {name} إلى {version}
+@msg	{name} installed: {version}	تم تثبيت {name}: {version}
+@msg	{name} updated to {version} (this release publishes no checksum, so only its size was checked)	تم تحديث {name} إلى {version} (لا يتضمن هذا الإصدار مجموعاً اختبارياً، لذلك تم التحقق من الحجم فقط)
+@msg	{name} installed: {version} (this release publishes no checksum, so only its size was checked)	تم تثبيت {name}: {version} (لا يتضمن هذا الإصدار مجموعاً اختبارياً، لذلك تم التحقق من الحجم فقط)
+@msg	{name} was removed	تم حذف {name}
+@msg	{name} is running. Quit it, then try again.	{name} يعمل. أغلقه ثم حاول مرة أخرى.
+@id	app.install	تثبيت
+@id	app.update	تحديث إلى {v}
+@id	app.open	فتح
+@id	app.download	تنزيل لنظام {os}
+@id	app.reveal	إظهار في Finder
+@id	app.reinstall	إعادة التثبيت
+@id	app.uninstall	إلغاء التثبيت…
+@id	app.notes	ملاحظات الإصدار
+@id	app.website	الموقع
+@id	app.github	المستودع على GitHub
+@id	app.releases	كل الإصدارات
+@id	launcher.update	تحديث وإعادة التشغيل
+@id	launcher.download	تنزيل
+@id	launcher.notes	ما الجديد
+@id	launcher.dismiss	إغلاق
+@id	settings.open	الإعدادات
+@id	settings.quit	إنهاء Mansa
+@id	view.grid	شبكة
+@id	view.table	جدول
+@id	filter.all	الكل
+@id	filter.installed	المثبّتة
+@id	filter.updates	التحديثات
+@id	filter.notinstalled	غير المثبّتة
+@id	sort.suite	حسب ترتيب الحزمة
+@id	sort.name	الاسم
+@id	sort.status	الحالة
+@id	sort.installed	الإصدار المثبّت
+@id	sort.latest	آخر إصدار
+@id	sort.released	أحدث إصدار
+@id	help.discord	Discord
+@id	help.github	GitHub
+@id	help.website	الموقع
+@id	update.check	التحقق من التحديثات
+@id	update.check_auto	التحقق من التحديثات تلقائياً
+@id	update.notify	إشعاري عند توفر تحديث لتطبيق مثبّت
+@id	update.prereleases	تضمين الإصدارات التجريبية (بيتا ومرشّحات الإصدار)
+@id	linux.preferred_kind	تثبيت التطبيقات الجديدة كـ
+@id	tray.close_to_tray	البقاء في شريط الإشعارات عند إغلاق النافذة
+@id	tray.show_on_current_desktop	إظهار النافذة على سطح المكتب الحالي
+@id	tray.login_item	تشغيل Mansa عند تسجيل الدخول
+@id	appearance.theme	المظهر
+	Show Mansa	إظهار Mansa
+	Check for Updates	التحقق من التحديثات
+	Visit studio.creative.ps	زيارة studio.creative.ps
+	Creative Studio on GitHub	Creative Studio على GitHub
+	App details	عن التطبيق
+	Close (Esc)	إغلاق (Esc)
+	Features	الميزات
+	Latest release	آخر إصدار
+	Version	الإصدار
+	Platforms	المنصات
+	Releases	الإصدارات
+	Enlarge picture	تكبير الصورة
+	Click to enlarge	انقر للتكبير
+	Previous picture (←)	الصورة السابقة (←)
+	Next picture (→)	الصورة التالية (→)
+	Loading pictures…	جارٍ تحميل الصور…
+	Pictures couldn't be loaded. Reopen this page to try again.	تعذّر تحميل الصور. أعد فتح هذه الصفحة للمحاولة مرة أخرى.
+@plural	Mansa · {n} update available|Mansa · {n} updates available	Mansa · {n} تحديث متاح|Mansa · {n} تحديثات متاحة

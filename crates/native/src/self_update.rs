@@ -35,7 +35,7 @@ use crate::process;
 /// How this running launcher was installed.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub enum Install {
-    /// The `ArtCraft Launcher.app` bundle.
+    /// The `Mansa.app` bundle.
     MacApp(PathBuf),
     /// The per-user Windows Installer package; the exe.
     Msi(PathBuf),
@@ -166,7 +166,7 @@ pub fn update(
     last: &dyn Fn() -> Result<(), String>,
 ) -> Result<(), String> {
     let (asset, _) = pick_asset(release, &[LAUNCHER.id], platform, &[install.kind()])
-        .ok_or_else(|| format!("ArtCraft Launcher {} has no {} for {}", release.version_label(), install.kind().label(), platform.label()))?;
+        .ok_or_else(|| format!("Mansa {} has no {} for {}", release.version_label(), install.kind().label(), platform.label()))?;
     let asset = asset.clone();
     let mut job = Job { http, paths, stop, phase };
     let file = install::download(release, &asset, &mut job)?;
@@ -229,7 +229,7 @@ pub fn update(
         #[allow(unreachable_patterns)]
         _ => {
             let _ = (pid, &file);
-            Err("this copy of ArtCraft Launcher can't update itself; download the new version instead".into())
+            Err("this copy of Mansa can't update itself; download the new version instead".into())
         }
     }
 }
@@ -333,12 +333,12 @@ mod tests {
         assert!(marker.exists(), "never started after the old launcher exited");
     }
 
-    /// A real disk image: the new `ArtCraft Launcher.app` replaces the old one in place.
+    /// A real disk image: the new `Mansa.app` replaces the old one in place.
     #[cfg(target_os = "macos")]
     #[test]
     fn the_new_bundle_replaces_the_running_one() {
         fn bundle(at: &Path, version: &str) {
-            let contents = at.join("ArtCraft Launcher.app/Contents");
+            let contents = at.join("Mansa.app/Contents");
             std::fs::create_dir_all(contents.join("MacOS")).unwrap();
             std::fs::write(
                 contents.join("Info.plist"),
@@ -349,7 +349,7 @@ mod tests {
                 ),
             )
             .unwrap();
-            std::fs::write(contents.join("MacOS/ArtCraft Launcher"), version).unwrap();
+            std::fs::write(contents.join("MacOS/Mansa"), version).unwrap();
         }
         let dir = tempfile::tempdir().unwrap();
         let apps = dir.path().join("Applications");
@@ -359,7 +359,7 @@ mod tests {
         let dmg = dir.path().join("artcraft-launcher-0.2.0-macos-universal.dmg");
         let one_at_a_time = install::macos::DISK_IMAGES.lock().unwrap_or_else(std::sync::PoisonError::into_inner);
         let ok = std::process::Command::new("hdiutil")
-            .args(["create", "-quiet", "-format", "UDZO", "-volname", "ArtCraft Launcher 0.2.0", "-srcfolder"])
+            .args(["create", "-quiet", "-format", "UDZO", "-volname", "Mansa 0.2.0", "-srcfolder"])
             .arg(&src)
             .arg(&dmg)
             .status()
@@ -367,14 +367,14 @@ mod tests {
             .success();
         assert!(ok, "hdiutil create failed");
         drop(one_at_a_time);
-        let current = apps.join("ArtCraft Launcher.app");
+        let current = apps.join("Mansa.app");
         let existing = Installed { version: None, source: InstallSource::MacApp, location: current.display().to_string(), package: None };
         // An unsigned test bundle: the signature check has its own tests in `install`.
         let expect = install::macos::Expect { team: None, version: None };
         let placed = install::macos::install_dmg(&LAUNCHER, &dmg, Some(&existing), &Paths::under(dir.path()), &expect).unwrap();
         assert_eq!(placed, current);
-        assert_eq!(std::fs::read_to_string(current.join("Contents/MacOS/ArtCraft Launcher")).unwrap(), "0.2.0");
-        assert!(!dir.path().join("Applications/.ArtCraft Launcher.app.partial").exists());
+        assert_eq!(std::fs::read_to_string(current.join("Contents/MacOS/Mansa")).unwrap(), "0.2.0");
+        assert!(!dir.path().join("Applications/.Mansa.app.partial").exists());
     }
 
     #[test]

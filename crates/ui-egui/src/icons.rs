@@ -5,34 +5,29 @@ use egui::ImageSource;
 /// The 128 px icon of a Craft App.
 pub fn app(id: &str) -> Option<ImageSource<'static>> {
     Some(match id {
-        "photocraft" => egui::include_image!("../../../assets/app-icons/photocraft.png"),
-        "vectorcraft" => egui::include_image!("../../../assets/app-icons/vectorcraft.png"),
-        "filmcraft" => egui::include_image!("../../../assets/app-icons/filmcraft.png"),
-        "lightcraft" => egui::include_image!("../../../assets/app-icons/lightcraft.png"),
-        "pdfcraft" => egui::include_image!("../../../assets/app-icons/pdfcraft.png"),
-        "effectcraft" => egui::include_image!("../../../assets/app-icons/effectcraft.png"),
-        "designcraft" => egui::include_image!("../../../assets/app-icons/designcraft.png"),
-        "wordcraft" => egui::include_image!("../../../assets/app-icons/wordcraft.png"),
-        "deckcraft" => egui::include_image!("../../../assets/app-icons/deckcraft.png"),
-        "gridcraft" => egui::include_image!("../../../assets/app-icons/gridcraft.png"),
-        "cadcraft" => egui::include_image!("../../../assets/app-icons/cadcraft.png"),
-        "soundcraft" => egui::include_image!("../../../assets/app-icons/soundcraft.png"),
+        "tlween" => egui::include_image!("../../../assets/app-icons/tlween.png"),
+        "rsm" => egui::include_image!("../../../assets/app-icons/rsm.png"),
+        "tsweer" => egui::include_image!("../../../assets/app-icons/tsweer.png"),
+        "lamasat" => egui::include_image!("../../../assets/app-icons/lamasat.png"),
+        "sf7aat" => egui::include_image!("../../../assets/app-icons/sf7aat.png"),
+        "effectat" => egui::include_image!("../../../assets/app-icons/effectat.png"),
+        "trteeb" => egui::include_image!("../../../assets/app-icons/trteeb.png"),
+        "klmat" => egui::include_image!("../../../assets/app-icons/klmat.png"),
+        "3urood" => egui::include_image!("../../../assets/app-icons/3urood.png"),
+        "arqam" => egui::include_image!("../../../assets/app-icons/arqam.png"),
+        "muhandes" => egui::include_image!("../../../assets/app-icons/muhandes.png"),
+        "7rrek" => egui::include_image!("../../../assets/app-icons/7rrek.png"),
         _ => return None,
     })
 }
 
-/// The ArtCraft wordmark, as supplied: dark ink for light backgrounds, white for dark ones.
-/// An ArtCraft trademark, not covered by the MIT/Apache license (`docs/brand/LICENSE-brand.txt`).
-pub fn artcraft_logo(dark_background: bool) -> ImageSource<'static> {
-    if dark_background {
-        egui::include_image!("../../../docs/brand/artcraft-logo-white.svg")
-    } else {
-        egui::include_image!("../../../docs/brand/artcraft-logo.svg")
-    }
+/// The Creative Studio star, for the header. Red on both backgrounds.
+pub fn mansa_logo(_dark_background: bool) -> ImageSource<'static> {
+    egui::include_image!("../../../docs/studio/mansa.svg")
 }
 
-/// The ArtCraft wordmark's width / height (its SVG view box: 1038.05 × 108).
-pub const ARTCRAFT_LOGO_ASPECT: f32 = 1038.05 / 108.0;
+/// The star is square.
+pub const MANSA_LOGO_ASPECT: f32 = 1.0;
 
 /// A social service's logo (Simple Icons, white, for tinting), by its name in `catalog::SOCIAL`.
 pub fn social(service: &str) -> Option<ImageSource<'static>> {
@@ -46,7 +41,7 @@ pub fn social(service: &str) -> Option<ImageSource<'static>> {
     })
 }
 
-/// The ArtCraft "A" mark in blue, as supplied: the launcher's app icon and getartcraft.com's favicon.
-pub fn artcraft_mark() -> ImageSource<'static> {
-    egui::include_image!("../../../docs/brand/artcraft-mark.svg")
+/// The Creative Studio star, for the dialogs' titles and the app icon's source.
+pub fn mansa_mark() -> ImageSource<'static> {
+    egui::include_image!("../../../docs/studio/mansa.svg")
 }

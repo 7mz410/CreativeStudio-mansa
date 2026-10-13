@@ -72,8 +72,8 @@ fn from_manifest(app: &CraftApp, manifest: &Manifest) -> Option<Installed> {
 
 /// Whether a file name is an AppImage of the app with asset stems `stems`, and the version its
 /// name gives. Matches only the names a release AppImage ends up with: the release's own
-/// (`photocraft-0.6.0-linux-x86_64.AppImage`) and the bare app name Gear Lever renames it to
-/// (`photocraft.appimage`, version unknown). The extension's case doesn't matter.
+/// (`tlween-0.6.0-linux-x86_64.AppImage`) and the bare app name Gear Lever renames it to
+/// (`tlween.appimage`, version unknown). The extension's case doesn't matter.
 #[cfg_attr(not(target_os = "linux"), allow(dead_code))]
 pub(crate) fn appimage_version(name: &str, stems: &[&str]) -> Option<Option<String>> {
     let split = name.len().checked_sub(".appimage".len())?;
@@ -109,8 +109,8 @@ fn exe_candidates(app: &CraftApp, location: Option<&Path>, program_files: &[Path
     dirs.flat_map(|d| app.stems().map(move |s| d.join(format!("{s}.exe")))).collect()
 }
 
-/// Version from `<app> --version` output. Binaries print the machine id (`photocraft 0.7.0`),
-/// the display name (`SoundCraft 0.5.0`), or a former id (`printcraft 0.2.1` for PdfCraft).
+/// Version from `<app> --version` output. Binaries print the machine id (`tlween 0.7.0`),
+/// the display name (`7rrek 0.5.0`), or a former id (`sf7aat 0.2.1` for sf7aat).
 #[cfg_attr(not(any(target_os = "linux", target_os = "freebsd")), allow(dead_code))]
 fn parse_cli_version(line: &str, app: &CraftApp) -> Option<version::Version> {
     let line = line.trim();
@@ -440,8 +440,8 @@ mod linux_tests {
                     .any(|m| crate::packages::candidate_names(a, *m).iter().any(|n| n == name))
             })
         };
-        assert!(ours("photocraft"));
-        assert!(ours("ai.storyteller.photocraft"));
+        assert!(ours("tlween"));
+        assert!(ours("ai.storyteller.tlween"));
         assert!(!ours("unrelated-package"));
     }
 
@@ -455,10 +455,10 @@ mod linux_tests {
 
     #[test]
     fn reads_binary_version_from_cli() {
-        let photo = CraftApp::by_id("photocraft").unwrap();
+        let photo = CraftApp::by_id("tlween").unwrap();
         let temp_dir = tempfile::tempdir().unwrap();
-        let bin = temp_dir.path().join("photocraft");
-        std::fs::write(&bin, "#!/bin/sh\necho 'photocraft 0.6.0 (0c72d9542, 2026-10-10)'\n").unwrap();
+        let bin = temp_dir.path().join("tlween");
+        std::fs::write(&bin, "#!/bin/sh\necho 'tlween 0.6.0 (0c72d9542, 2026-10-10)'\n").unwrap();
         use std::os::unix::fs::PermissionsExt;
         std::fs::set_permissions(&bin, std::fs::Permissions::from_mode(0o755)).unwrap();
         let ver = linux::binary_version(&bin, photo);
@@ -475,10 +475,10 @@ mod linux_tests {
             std::fs::set_permissions(&bin, std::fs::Permissions::from_mode(0o755)).unwrap();
             bin
         };
-        let sound = write("soundcraft", "#!/bin/sh\necho 'SoundCraft 0.5.0'\n");
-        assert_eq!(linux::binary_version(&sound, CraftApp::by_id("soundcraft").unwrap()).unwrap().to_string(), "0.5.0");
-        let pdf = write("pdfcraft", "#!/bin/sh\necho 'printcraft 0.2.1'\n");
-        assert_eq!(linux::binary_version(&pdf, CraftApp::by_id("pdfcraft").unwrap()).unwrap().to_string(), "0.2.1");
+        let sound = write("7rrek", "#!/bin/sh\necho '7rrek 0.5.0'\n");
+        assert_eq!(linux::binary_version(&sound, CraftApp::by_id("7rrek").unwrap()).unwrap().to_string(), "0.5.0");
+        let pdf = write("sf7aat", "#!/bin/sh\necho 'sf7aat 0.2.1'\n");
+        assert_eq!(linux::binary_version(&pdf, CraftApp::by_id("sf7aat").unwrap()).unwrap().to_string(), "0.2.1");
     }
 }
 
@@ -490,22 +490,22 @@ mod tests {
 
     #[test]
     fn recognises_appimage_names_conservatively() {
-        let pdf = ["pdfcraft", "printcraft"];
+        let pdf = ["sf7aat", "sf7aat"];
         let v = |n: &str| appimage_version(n, &pdf);
-        assert_eq!(v("pdfcraft-0.3.0-linux-x86_64.AppImage"), Some(Some("0.3.0".into())));
-        assert_eq!(v("printcraft-0.2.1-linux-aarch64.appimage"), Some(Some("0.2.1".into())));
-        assert_eq!(v("pdfcraft-0.3.0-rc.1-linux-x86_64.AppImage"), Some(Some("0.3.0-rc.1".into())));
+        assert_eq!(v("sf7aat-0.3.0-linux-x86_64.AppImage"), Some(Some("0.3.0".into())));
+        assert_eq!(v("sf7aat-0.2.1-linux-aarch64.appimage"), Some(Some("0.2.1".into())));
+        assert_eq!(v("sf7aat-0.3.0-rc.1-linux-x86_64.AppImage"), Some(Some("0.3.0-rc.1".into())));
         // Gear Lever's rename, and a plain rename by hand.
-        assert_eq!(v("pdfcraft.appimage"), Some(None));
-        assert_eq!(v("PdfCraft.AppImage"), Some(None));
+        assert_eq!(v("sf7aat.appimage"), Some(None));
+        assert_eq!(v("sf7aat.AppImage"), Some(None));
         for other in [
-            "pdfcraft-0.3.0-linux-x86_64.AppImage.zsync",
-            "pdfcraft-0.3.0-linux-x86_64.deb",
-            "pdfcraft-0.3.0-windows-x64.AppImage",
-            "pdfcraft-cli-0.3.0-linux-x86_64.AppImage",
-            "photocraft-0.6.0-linux-x86_64.AppImage",
+            "sf7aat-0.3.0-linux-x86_64.AppImage.zsync",
+            "sf7aat-0.3.0-linux-x86_64.deb",
+            "sf7aat-0.3.0-windows-x64.AppImage",
+            "sf7aat-cli-0.3.0-linux-x86_64.AppImage",
+            "tlween-0.6.0-linux-x86_64.AppImage",
             "mypdfcraft.AppImage",
-            "pdfcraft-latest.AppImage",
+            "sf7aat-latest.AppImage",
             ".appimage",
             "x",
         ] {
@@ -515,38 +515,38 @@ mod tests {
 
     #[test]
     fn parse_cli_version_accepts_id_display_name_and_former_id() {
-        let photo = CraftApp::by_id("photocraft").unwrap();
-        let sound = CraftApp::by_id("soundcraft").unwrap();
-        let pdf = CraftApp::by_id("pdfcraft").unwrap();
-        assert_eq!(parse_cli_version("photocraft 0.7.0 (dev build)", photo).unwrap().to_string(), "0.7.0");
-        assert_eq!(parse_cli_version("SoundCraft 0.5.0", sound).unwrap().to_string(), "0.5.0");
-        assert_eq!(parse_cli_version("printcraft 0.2.1", pdf).unwrap().to_string(), "0.2.1");
-        assert_eq!(parse_cli_version("PdfCraft 0.6.0", pdf).unwrap().to_string(), "0.6.0");
-        assert!(strip_cli_prefix("photocraft-cli 1.0.0", "photocraft").is_none());
+        let photo = CraftApp::by_id("tlween").unwrap();
+        let sound = CraftApp::by_id("7rrek").unwrap();
+        let pdf = CraftApp::by_id("sf7aat").unwrap();
+        assert_eq!(parse_cli_version("tlween 0.7.0 (dev build)", photo).unwrap().to_string(), "0.7.0");
+        assert_eq!(parse_cli_version("7rrek 0.5.0", sound).unwrap().to_string(), "0.5.0");
+        assert_eq!(parse_cli_version("sf7aat 0.2.1", pdf).unwrap().to_string(), "0.2.1");
+        assert_eq!(parse_cli_version("sf7aat 0.6.0", pdf).unwrap().to_string(), "0.6.0");
+        assert!(strip_cli_prefix("tlween-cli 1.0.0", "tlween").is_none());
     }
 
     #[cfg(target_os = "linux")]
     #[test]
     fn finds_appimages_in_every_folder_newest_first() {
-        let app = CraftApp::by_id("photocraft").unwrap();
+        let app = CraftApp::by_id("tlween").unwrap();
         let root = tempfile::tempdir().unwrap();
         let (apps, gear, bin) = (root.path().join("Applications"), root.path().join("AppImages"), root.path().join("bin"));
         for d in [&apps, &gear, &bin] {
             std::fs::create_dir_all(d).unwrap();
         }
-        std::fs::write(apps.join("photocraft-0.5.0-linux-x86_64.AppImage"), b"").unwrap();
-        std::fs::write(apps.join("wordcraft-0.3.0-linux-x86_64.AppImage"), b"").unwrap();
-        std::fs::write(gear.join("photocraft.appimage"), b"").unwrap();
-        std::fs::write(bin.join("photocraft-0.6.0-linux-x86_64.AppImage"), b"").unwrap();
-        std::fs::create_dir(bin.join("photocraft.AppImage")).unwrap();
+        std::fs::write(apps.join("tlween-0.5.0-linux-x86_64.AppImage"), b"").unwrap();
+        std::fs::write(apps.join("klmat-0.3.0-linux-x86_64.AppImage"), b"").unwrap();
+        std::fs::write(gear.join("tlween.appimage"), b"").unwrap();
+        std::fs::write(bin.join("tlween-0.6.0-linux-x86_64.AppImage"), b"").unwrap();
+        std::fs::create_dir(bin.join("tlween.AppImage")).unwrap();
         let found = linux::appimages_in(app, &[apps.clone(), gear.clone(), bin.clone(), root.path().join("missing")]);
         let names: Vec<_> = found.iter().map(|(p, v)| (p.clone(), v.as_ref().map(ToString::to_string))).collect();
         assert_eq!(
             names,
             [
-                (bin.join("photocraft-0.6.0-linux-x86_64.AppImage"), Some("0.6.0".to_string())),
-                (apps.join("photocraft-0.5.0-linux-x86_64.AppImage"), Some("0.5.0".to_string())),
-                (gear.join("photocraft.appimage"), None),
+                (bin.join("tlween-0.6.0-linux-x86_64.AppImage"), Some("0.6.0".to_string())),
+                (apps.join("tlween-0.5.0-linux-x86_64.AppImage"), Some("0.5.0".to_string())),
+                (gear.join("tlween.appimage"), None),
             ]
         );
     }
@@ -558,50 +558,22 @@ mod tests {
     }
 
     #[test]
-    fn pdfcraft_matches_its_former_printcraft_installer_name() {
-        let pdf = CraftApp::by_id("pdfcraft").unwrap();
-        assert!(is_installer_entry(pdf, "PrintCraft", LEARNING_MACHINES), "a PrintCraft entry from {LEARNING_MACHINES} should be PdfCraft's");
-    }
-
-    #[test]
-    fn pdfcraft_still_matches_its_own_installer_name() {
-        let pdf = CraftApp::by_id("pdfcraft").unwrap();
-        assert!(is_installer_entry(pdf, "PdfCraft", LEARNING_MACHINES));
-    }
-
-    #[test]
-    fn printcraft_entries_match_nothing_else() {
-        let pdf = CraftApp::by_id("pdfcraft").unwrap();
-        assert!(!is_installer_entry(pdf, "PrintCraft", "Some Other Publisher"));
-        assert!(!is_installer_entry(pdf, "PhotoCraft", LEARNING_MACHINES));
-        for a in SUITE.iter().filter(|a| a.id != "pdfcraft") {
-            assert!(!is_installer_entry(a, "PrintCraft", LEARNING_MACHINES), "PrintCraft matched {}", a.name);
+    fn sf7aat_entries_match_nothing_else() {
+        let pdf = CraftApp::by_id("sf7aat").unwrap();
+        assert!(!is_installer_entry(pdf, "sf7aat", "Some Other Publisher"));
+        assert!(!is_installer_entry(pdf, "tlween", LEARNING_MACHINES));
+        for a in SUITE.iter().filter(|a| a.id != "sf7aat") {
+            assert!(!is_installer_entry(a, "sf7aat", LEARNING_MACHINES), "sf7aat matched {}", a.name);
         }
-    }
-
-    #[test]
-    fn pdfcraft_exe_is_sought_under_every_name_it_has_shipped_as() {
-        let pdf = CraftApp::by_id("pdfcraft").unwrap();
-        let location = PathBuf::from(r"D:\Apps\PrintCraft");
-        let roots = roots();
-        let mut want = vec![location.join("pdfcraft.exe"), location.join("printcraft.exe")];
-        for root in &roots {
-            for dir in ["PdfCraft", "PrintCraft"] {
-                want.push(root.join(dir).join("pdfcraft.exe"));
-                want.push(root.join(dir).join("printcraft.exe"));
-            }
-        }
-        assert_eq!(exe_candidates(pdf, Some(&location), &roots), want);
     }
 
     #[test]
     fn apps_without_former_names_match_and_find_their_exe_as_before() {
         let roots = roots();
         let location = PathBuf::from(r"D:\Apps\Somewhere");
-        for a in SUITE.iter().filter(|a| a.former_ids.is_empty() && a.former_names.is_empty()) {
+        for a in SUITE.iter() {
             assert!(is_installer_entry(a, a.name, LEARNING_MACHINES), "{}", a.name);
             assert!(!is_installer_entry(a, a.name, "Some Other Publisher"), "{}", a.name);
-            assert!(!is_installer_entry(a, &a.name.to_lowercase(), LEARNING_MACHINES), "{}", a.name);
             let exe = format!("{}.exe", a.id);
             let in_program_files: Vec<PathBuf> = roots.iter().map(|r| r.join(a.name).join(&exe)).collect();
             assert_eq!(exe_candidates(a, None, &roots), in_program_files);

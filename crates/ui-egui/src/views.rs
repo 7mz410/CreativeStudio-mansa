@@ -77,10 +77,12 @@ impl LauncherUi {
             if bar == TitleBar::MacOs {
                 ui.add_space(TRAFFIC_LIGHTS_W);
             }
-            // The ArtCraft wordmark exactly as supplied, in its own cell.
-            let logo = vec2(14.0 * crate::icons::ARTCRAFT_LOGO_ASPECT, 14.0);
+            // The Creative Studio star, in its own cell.
+            let logo = vec2(14.0 * crate::icons::MANSA_LOGO_ASPECT, 14.0);
             let (cell, _) = ui.allocate_exact_size(vec2(logo.x + 40.0, h), Sense::hover());
-            egui::Image::new(crate::icons::artcraft_logo(t.dark)).alt_text(tl!("ArtCraft")).paint_at(ui, Rect::from_center_size(cell.center(), logo));
+            egui::Image::new(crate::icons::mansa_logo(t.dark))
+                .alt_text(tl!("Creative Studio"))
+                .paint_at(ui, Rect::from_center_size(cell.center(), logo));
             ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
                 if bar == TitleBar::Custom {
                     widgets::window_buttons(ui, h);
@@ -90,10 +92,6 @@ impl LauncherUi {
                 }
                 if widgets::nav_icon(ui, "⟳", tl!("Check for updates"), h, self.checking).clicked() {
                     self.check_now();
-                }
-                ui.add_space(6.0);
-                if widgets::nav_link(ui, tl!("Discord"), tl!("Join the ArtCraft community on Discord"), h, false).clicked() {
-                    ui.ctx().open_url(egui::OpenUrl::new_tab(artcraft_launcher_core::catalog::DISCORD_URL));
                 }
                 ui.add_space(6.0);
                 widgets::rule(ui, h);
@@ -117,9 +115,9 @@ impl LauncherUi {
                         ui.add_space(16.0);
                         widgets::tag(ui, tl!("Launcher"), t.invert_bg, t.invert_fg);
                     }
-                    if ui.available_width() >= 12.0 + widgets::hud_galley(ui, tl!("Craft App Suite"), t.muted).size().x {
+                    if ui.available_width() >= 12.0 + widgets::hud_galley(ui, tl!("Creative Studio suite"), t.muted).size().x {
                         ui.add_space(12.0);
-                        widgets::hud(ui, tl!("Craft App Suite"), t.muted);
+                        widgets::hud(ui, tl!("Creative Studio suite"), t.muted);
                     }
                 });
             });
@@ -143,7 +141,7 @@ impl LauncherUi {
                         widgets::tag(ui, tl!("Update"), t.accent, Color32::WHITE);
                         ui.add_space(4.0);
                         ui.label(
-                            RichText::new(fmt(tl!("ArtCraft Launcher {version} is available."), &[("version", &r.version_label())]))
+                            RichText::new(fmt(tl!("Mansa {version} is available."), &[("version", &r.version_label())]))
                                 .family(theme::medium())
                                 .color(t.ink_strong),
                         );
@@ -316,8 +314,8 @@ impl LauncherUi {
             Some(p) => fmt(tl!("Downloads for {platform}"), &[("platform", &p.label())]),
             None => tl!("No downloads for this system").into(),
         };
-        use artcraft_launcher_core::catalog::{DISCORD_URL, GITHUB_URL, SOCIAL, WEBSITE_URL};
-        let links = [(tl!("Discord"), DISCORD_URL), (tl!("GitHub"), GITHUB_URL), (tl!("Website"), WEBSITE_URL)];
+        use artcraft_launcher_core::catalog::{GITHUB_URL, SOCIAL, WEBSITE_URL};
+        let links = [(tl!("GitHub"), GITHUB_URL), (tl!("Website"), WEBSITE_URL)];
         let (icon, link_gap) = (13.0, 16.0);
         // The links and icons on the right keep their size; the status on the left gets what is
         // left and is cut short with "…", never drawn under them. A narrow window drops the

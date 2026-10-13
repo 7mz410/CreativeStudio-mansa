@@ -69,11 +69,11 @@ const PLATFORMS: &str = "macOS, Windows, Linux, FreeBSD, web";
 
 pub const DETAILS: [AppDetails; 12] = [
     AppDetails {
-        id: "photocraft",
+        id: "tlween",
         headline: "The image editor you already know how to use.",
         about: "Layers, masks, adjustment layers, layer styles, type, vectors and brushes in a native app \
             written in Rust. Open source, offline, and yours.\n\n\
-            PhotoCraft keeps the menus, shortcuts and panels your hands already know, so there is \
+            tlween keeps the menus, shortcuts and panels your hands already know, so there is \
             nothing to relearn.",
         features: &[
             feature("Native GPU canvas", "No Electron and no web view: a fast native compositor."),
@@ -91,7 +91,7 @@ pub const DETAILS: [AppDetails; 12] = [
         platforms: PLATFORMS,
     },
     AppDetails {
-        id: "vectorcraft",
+        id: "rsm",
         headline: "Vector illustration, reimagined in pure Rust.",
         about: "A native vector illustration app with the pen, panels and shortcuts illustrators expect. \
                 Open source, and it also runs in a browser.",
@@ -118,7 +118,7 @@ pub const DETAILS: [AppDetails; 12] = [
         platforms: PLATFORMS,
     },
     AppDetails {
-        id: "filmcraft",
+        id: "tsweer",
         headline: "Professional video editing, rebuilt from scratch.",
         about: "A native video editor written in pure Rust, with source and program monitors, a real timeline and \
                 every trim mode.",
@@ -141,7 +141,7 @@ pub const DETAILS: [AppDetails; 12] = [
         platforms: PLATFORMS,
     },
     AppDetails {
-        id: "lightcraft",
+        id: "lamasat",
         headline: "Your photos. Your pixels. Your machine.",
         about: "A fast photo library and non-destructive raw developer, written from scratch in pure Rust. \
                 No account, no cloud, no telemetry and no subscription.",
@@ -162,7 +162,7 @@ pub const DETAILS: [AppDetails; 12] = [
         platforms: PLATFORMS,
     },
     AppDetails {
-        id: "pdfcraft",
+        id: "sf7aat",
         headline: "The open-source PDF workbench.",
         about: "Read, organize, combine, split and secure PDFs in a fast, native app written in Rust from the \
                 ground up. No account, no telemetry and no cloud.",
@@ -178,7 +178,7 @@ pub const DETAILS: [AppDetails; 12] = [
         platforms: PLATFORMS,
     },
     AppDetails {
-        id: "effectcraft",
+        id: "effectat",
         headline: "Motion graphics and visual effects, in pure Rust.",
         about: "A native compositor with compositions, layers, keyframes, effects, expressions, 3D cameras and \
                 lights, and a render queue. Young, moving fast, and already usable.",
@@ -208,7 +208,7 @@ pub const DETAILS: [AppDetails; 12] = [
         platforms: PLATFORMS,
     },
     AppDetails {
-        id: "designcraft",
+        id: "trteeb",
         headline: "Page layout and publishing, rebuilt in pure Rust.",
         about: "A native layout app with spreads, parent pages, threaded stories, styles, swatches, text wrap and \
                 a paragraph composer. No subscription, no license server and no telemetry.",
@@ -227,7 +227,7 @@ pub const DETAILS: [AppDetails; 12] = [
         platforms: PLATFORMS,
     },
     AppDetails {
-        id: "wordcraft",
+        id: "klmat",
         headline: "The familiar word processor, native and offline.",
         about: "A word processor with the ribbon, shortcuts and behavior you already know, written in Rust. \
                 Open source, and built from public specifications.",
@@ -257,7 +257,7 @@ pub const DETAILS: [AppDetails; 12] = [
         platforms: "macOS, Windows, Linux, BSD, web",
     },
     AppDetails {
-        id: "deckcraft",
+        id: "3urood",
         headline: "Presentations, rebuilt in Rust.",
         about: "A presentation app with slide masters, shapes, animations and a presenter view, written in Rust. \
                 In alpha, heading for beta.",
@@ -284,7 +284,7 @@ pub const DETAILS: [AppDetails; 12] = [
         platforms: "macOS, Windows, Linux, BSD, web",
     },
     AppDetails {
-        id: "gridcraft",
+        id: "arqam",
         headline: "Spreadsheets you already know how to use.",
         about: "A spreadsheet with the ribbon, formula bar, sheet tabs and shortcuts you know, on a calculation engine \
                 written in Rust. No subscription, no license server and no telemetry.",
@@ -317,7 +317,7 @@ pub const DETAILS: [AppDetails; 12] = [
         platforms: "macOS, Windows, Linux, BSD, web",
     },
     AppDetails {
-        id: "cadcraft",
+        id: "muhandes",
         headline: "Computer-aided drafting, in pure Rust.",
         about: "A drafting app with the command line, object snaps and workflow that drafters already know. Free, with no \
                 account and no subscription. In early, fast development.",
@@ -341,7 +341,7 @@ pub const DETAILS: [AppDetails; 12] = [
         platforms: PLATFORMS,
     },
     AppDetails {
-        id: "soundcraft",
+        id: "7rrek",
         headline: "Recording, editing and mixing, in Rust.",
         about: "A digital audio workstation that follows the workflow audio engineers already know: an Edit window for \
                 arranging and editing, and a Mix window for balancing. Pre-alpha.",
@@ -414,12 +414,12 @@ mod tests {
 
     #[test]
     fn picture_addresses_come_only_from_the_pages_own_pictures() {
-        let page = AppDetails::by_id("photocraft").unwrap();
+        let page = AppDetails::by_id("tlween").unwrap();
         assert_eq!(
             page.screenshot_url("demo").as_deref(),
-            Some("https://raw.githubusercontent.com/storytold/craft-launcher-assets/v1/photocraft/demo.jpg")
+            Some("https://raw.githubusercontent.com/storytold/craft-launcher-assets/v1/tlween/demo.jpg")
         );
-        for key in ["", "nope", "../vectorcraft/neon", "demo/../masks", "demo.jpg", "/etc/passwd", "demo?x=1", "demo#"] {
+        for key in ["", "nope", "../rsm/neon", "demo/../masks", "demo.jpg", "/etc/passwd", "demo?x=1", "demo#"] {
             assert_eq!(page.screenshot_url(key), None, "{key:?}");
         }
         // Every picture of every page has an address of the one shape, with nothing to escape.

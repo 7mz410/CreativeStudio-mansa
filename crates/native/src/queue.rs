@@ -251,13 +251,13 @@ mod tests {
     fn jobs_that_wait_together_share_one_call_per_command() {
         let queue = Queue::new();
         let calls = Calls::default();
-        let jobs = [(install(), "a.deb"), (install(), "b.deb"), (remove(), "photocraft"), (install(), "c.deb")];
+        let jobs = [(install(), "a.deb"), (install(), "b.deb"), (remove(), "tlween"), (install(), "c.deb")];
         let results = behind_a_running_install(&queue, &jobs, &|command, targets| {
             calls.record(command, targets);
             Ok(())
         });
         assert_eq!(results, vec![Some(Ok(())); 4]);
-        assert_eq!(calls.taken(), [line(&["apt-get", "install", "-y", "a.deb", "b.deb", "c.deb"]), line(&["apt-get", "remove", "-y", "photocraft"])]);
+        assert_eq!(calls.taken(), [line(&["apt-get", "install", "-y", "a.deb", "b.deb", "c.deb"]), line(&["apt-get", "remove", "-y", "tlween"])]);
     }
 
     #[test]

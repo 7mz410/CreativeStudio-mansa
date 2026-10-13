@@ -3,6 +3,12 @@ Copyright (c) 2026 ArtCraft Team and the ArtCraft Launcher contributors.
 Licensed under the MIT License or the Apache License, Version 2.0, at your option
 (LICENSE-MIT, LICENSE-APACHE).
 
+mansa is a fork of Craft Launcher by the ArtCraft Team and the Craft Launcher contributors
+(https://github.com/storytold/craft-launcher), made by the Creative Studio project (https://studio.creative.ps).
+Our changes are listed in studio/CHANGES.md. The Creative Studio name and logos (docs/studio/) belong
+to the Creative Studio project. The ArtCraft name and logos are trademarks of the ArtCraft Team; this fork
+does not use them, as their brand terms require (upstream's docs/brand/ was removed).
+
 The ArtCraft name, wordmark, logo and "A" mark (docs/brand/) are trademarks of the ArtCraft Team.
 They are NOT open source and are NOT covered by the MIT or Apache-2.0 license above. This includes
 everywhere ArtCraft Launcher shows them: the app icon (assets/app-icon/, the blue "A" mark), the

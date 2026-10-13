@@ -68,17 +68,17 @@ fn release(id: &str, v: &str, at: i64) -> Release {
 fn events() -> Vec<Event> {
     let mut ev = Vec::new();
     let versions = [
-        ("photocraft", "0.5.0"),
-        ("vectorcraft", "0.7.0"),
-        ("filmcraft", "0.4.0"),
-        ("lightcraft", "0.4.0"),
-        ("pdfcraft", "0.4.0"),
-        ("effectcraft", "0.6.0"),
-        ("designcraft", "0.4.0"),
-        ("wordcraft", "0.3.0"),
-        ("deckcraft", "0.3.0"),
-        ("gridcraft", "0.3.0"),
-        ("cadcraft", "0.3.0"),
+        ("tlween", "0.5.0"),
+        ("rsm", "0.7.0"),
+        ("tsweer", "0.4.0"),
+        ("lamasat", "0.4.0"),
+        ("sf7aat", "0.4.0"),
+        ("effectat", "0.6.0"),
+        ("trteeb", "0.4.0"),
+        ("klmat", "0.3.0"),
+        ("3urood", "0.3.0"),
+        ("arqam", "0.3.0"),
+        ("muhandes", "0.3.0"),
     ];
     for (i, (id, v)) in versions.iter().enumerate() {
         ev.push(Event::Latest {
@@ -87,8 +87,8 @@ fn events() -> Vec<Event> {
             from: Origin::ArtCraftApi,
         });
     }
-    ev.push(Event::Latest { app: "soundcraft".into(), latest: LatestRelease::None, from: Origin::ArtCraftApi });
-    let installed = [("photocraft", "0.4.1"), ("lightcraft", "0.4.0"), ("wordcraft", "0.3.0"), ("effectcraft", "0.5.0")];
+    ev.push(Event::Latest { app: "7rrek".into(), latest: LatestRelease::None, from: Origin::ArtCraftApi });
+    let installed = [("tlween", "0.4.1"), ("lamasat", "0.4.0"), ("klmat", "0.3.0"), ("effectat", "0.5.0")];
     for app in &SUITE {
         let inst = installed.iter().find(|(id, _)| *id == app.id).map(|(_, v)| Installed {
             version: version::parse(v),
@@ -98,9 +98,9 @@ fn events() -> Vec<Event> {
         });
         ev.push(Event::Detected { app: app.id.into(), installed: inst });
     }
-    ev.push(Event::Progress { app: "filmcraft".into(), phase: JobPhase::Downloading { done: 48 << 20, total: 131 << 20 } });
-    ev.push(Event::Paused { app: "deckcraft".into(), download: Some(PausedDownload { done: 30 << 20, total: 120 << 20 }) });
-    ev.push(Event::Progress { app: "gridcraft".into(), phase: JobPhase::Reconnecting { done: 10 << 20, total: 90 << 20 } });
+    ev.push(Event::Progress { app: "tsweer".into(), phase: JobPhase::Downloading { done: 48 << 20, total: 131 << 20 } });
+    ev.push(Event::Paused { app: "3urood".into(), download: Some(PausedDownload { done: 30 << 20, total: 120 << 20 }) });
+    ev.push(Event::Progress { app: "arqam".into(), phase: JobPhase::Reconnecting { done: 10 << 20, total: 90 << 20 } });
     ev.push(Event::CheckFinished { at: NOW - 180, source: Source::GitHubApi, rate_limited_until: None });
     ev
 }
@@ -186,7 +186,7 @@ fn simplified_chinese_switches_persists_and_keeps_install_actions() {
     h.get_by_label("全部更新（2）").click();
     h.run_steps(2);
     let installs: Vec<_> = sent.borrow().iter().filter_map(|c| if let Command::Install { app } = c { Some(app.clone()) } else { None }).collect();
-    assert_eq!(installs, ["photocraft", "effectcraft"]);
+    assert_eq!(installs, ["tlween", "effectat"]);
 
     let (mut table, _) = harness_language(ViewMode::Table, egui::Theme::Light, true, &restored.language);
     table.run_steps(6);

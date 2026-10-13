@@ -508,7 +508,8 @@ pub fn social_icons(ui: &mut Ui, size: f32) {
         let color = if resp.hovered() { t.ink_strong } else { t.faint };
         egui::Image::new(icon).tint(color).paint_at(ui, rect.shrink(pad));
         resp.widget_info(|| egui::WidgetInfo::labeled(egui::WidgetType::Link, true, *name));
-        let resp = resp.on_hover_text(crate::i18n::fmt(tl!("ArtCraft on {name}"), &[("name", name)])).on_hover_cursor(egui::CursorIcon::PointingHand);
+        let resp =
+            resp.on_hover_text(crate::i18n::fmt(tl!("Creative Studio on {name}"), &[("name", name)])).on_hover_cursor(egui::CursorIcon::PointingHand);
         if resp.clicked() {
             ui.ctx().open_url(egui::OpenUrl::new_tab(*url));
         }

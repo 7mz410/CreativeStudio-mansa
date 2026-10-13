@@ -7,7 +7,7 @@
 # Other context = disambiguation for tr_ctx.
 
 	Launcher	Launcher
-	Craft App Suite	Craft App Suite
+	Creative Studio suite	Creative Studio suite
 	Open Source Tools for Creatives, Makers, and Builders	Ferramentas de código aberto para criadores, artistas e desenvolvedores
 	Settings	Configurações
 	Check for updates	Verificar atualizações
@@ -27,7 +27,6 @@
 	Installed version	Versão instalada
 	Latest version	Última versão
 	Newest release	Lançamento mais recente
-	Discord	Discord
 	GitHub	GitHub
 	Website	Site
 	Classic apps	Aplicativos clássicos
@@ -61,7 +60,7 @@
 	Reinstall	Reinstalar
 	Uninstall…	Desinstalar…
 	All releases	Todos os lançamentos
-	ArtCraft Launcher {version} is available.	ArtCraft Launcher {version} está disponível.
+	Mansa {version} is available.	Mansa {version} está disponível.
 	Dismiss	Dispensar
 	Update and restart	Atualizar e reiniciar
 	A new version is available. Would you like to relaunch with the updated version?	Uma nova versão está disponível. Reiniciar com a nova versão?
@@ -71,7 +70,7 @@
 	Released {date}	Lançado em {date}
 	Open on GitHub	Abrir no GitHub
 	Close	Fechar
-	ArtCraft Launcher {version}	ArtCraft Launcher {version}
+	Mansa {version}	Mansa {version}
 	Only when I ask	Apenas quando eu pedir
 	Automatically download and install updates	Baixar e instalar atualizações automaticamente
 	Notify me when an installed app has an update	Notificar quando um aplicativo instalado tiver atualização
@@ -83,11 +82,11 @@
 	Running in the background	Execução em segundo plano
 	Keep running in the tray when the window is closed	Continuar na bandeja do sistema ao fechar a janela
 	Show the window on the current desktop	Mostrar a janela na área de trabalho atual
-	Start ArtCraft Launcher when I log in	Iniciar o ArtCraft Launcher ao fazer login
+	Start Mansa when I log in	Iniciar o Mansa ao fazer login
 	Community	Comunidade
-	Questions, ideas and news from the ArtCraft team	Dúvidas, ideias e novidades da equipe ArtCraft
+	Questions, ideas and news from the Creative Studio team	Dúvidas, ideias e novidades da equipe Creative Studio
 	Appearance	Aparência
-	Quit ArtCraft Launcher	Sair do ArtCraft Launcher
+	Quit Mansa	Sair do Mansa
 	Done	Concluído
 	Uninstall {name}?	Desinstalar {name}?
 	The app will be moved to the Trash. Your documents and settings stay.	O aplicativo será movido para a Lixeira. Seus documentos e configurações serão mantidos.
@@ -112,7 +111,6 @@
 	Apps you hid	Aplicativos que você ocultou
 	Checked {ago} · using {sources}	Verificado {ago} · via {sources}
 	{a} and {b}	{a} e {b}
-	Join the Discord	Entrar no Discord
 	Learn more	Saiba mais
 	Minimize	Minimizar
 	Maximize	Maximizar
@@ -122,7 +120,7 @@
 	Open link	Abrir link
 	Update	Atualizar
 	{name} icon	Ícone do {name}
-	Loading ArtCraft Launcher…	Carregando ArtCraft Launcher…
+	Loading Mansa…	Carregando Mansa…
 	Cancel update	Cancelar atualização
 	Stop waiting; the update can be started again later	Parar de aguardar; a atualização pode ser iniciada novamente depois
 	Download again	Baixar novamente
@@ -146,18 +144,18 @@
 	Tarball (.tar.gz)	Arquivo (.tar.gz)
 
 # Contextual: each app's tagline, keyed by app id
-photocraft	Image editing	Edição de imagens
-vectorcraft	Vector illustration	Ilustração vetorial
-filmcraft	Video editing, color and sound	Edição de vídeo, cor e som
-lightcraft	Photo library and raw development	Biblioteca de fotos e revelação RAW
-pdfcraft	Reading, organizing and protecting PDFs	Leitura, organização e proteção de PDFs
-effectcraft	Motion graphics and visual effects	Motion graphics e efeitos visuais
-designcraft	Page layout and publishing	Diagramação de páginas e publicação
-wordcraft	Writing and document design	Escrita e design de documentos
-deckcraft	Presentations and slide shows	Apresentações e slides
-gridcraft	Spreadsheets and data	Planilhas e dados
-cadcraft	Computer-aided design and drafting	Desenho técnico e projeto assistido por computador (CAD)
-soundcraft	Recording, editing and mixing audio	Gravação, edição e mixagem de áudio
+tlween	Image editing	Edição de imagens
+rsm	Vector illustration	Ilustração vetorial
+tsweer	Video editing, color and sound	Edição de vídeo, cor e som
+lamasat	Photo library and raw development	Biblioteca de fotos e revelação RAW
+sf7aat	Reading, organizing and protecting PDFs	Leitura, organização e proteção de PDFs
+effectat	Motion graphics and visual effects	Motion graphics e efeitos visuais
+trteeb	Page layout and publishing	Diagramação de páginas e publicação
+klmat	Writing and document design	Escrita e design de documentos
+3urood	Presentations and slide shows	Apresentações e slides
+arqam	Spreadsheets and data	Planilhas e dados
+muhandes	Computer-aided design and drafting	Desenho técnico e projeto assistido por computador (CAD)
+7rrek	Motion and animation	Movimento e animação
 
 # Contextual: month abbreviations for date rendering
 month	Jan	jan.
@@ -178,8 +176,7 @@ month	Dec	dez.
 	Installing for {platform}	Instalando para {platform}
 	Downloads for {platform}	Downloads para {platform}
 	No downloads for this system	Nenhum download disponível para este sistema
-	Join the ArtCraft community on Discord	Entre na comunidade ArtCraft no Discord
-	ArtCraft on {name}	ArtCraft no {name}
+	Creative Studio on {name}	Creative Studio no {name}
 	Couldn't open {name}: {e}	Não foi possível abrir {name}: {e}
 	Download cancelled	Download cancelado
 	Available to install	Disponível para instalar
@@ -199,7 +196,7 @@ month	Dec	dez.
 	Version {version} installed	Versão {version} instalada
 	Version {latest}	Versão {latest}
 	No release published yet	Nenhum lançamento publicado ainda
-	ArtCraft Launcher	ArtCraft Launcher
+	Mansa	Mansa
 	App	Aplicativo
 	Latest	Última
 	Released	Lançado
@@ -220,7 +217,7 @@ month	Dec	dez.
 	Downloads the new version, replaces this one and opens it again	Baixa a nova versão, substitui a atual e abre novamente
 	Couldn't check for updates: {f}	Não foi possível verificar atualizações: {f}
 	GitHub repository	Repositório no GitHub
-	ArtCraft	ArtCraft
+	Creative Studio	Creative Studio
 	Update 1 app	Atualizar 1 aplicativo
 	Update all ({count})	Atualizar todos ({count})
 	⊞  Grid	⊞  Grade
@@ -233,7 +230,7 @@ month	Dec	dez.
 	Full changelog	Histórico completo de alterações
 	link	link
 	No apps match	Nenhum aplicativo encontrado
-	Open ArtCraft Launcher to update.	Abra o ArtCraft Launcher para atualizar.
+	Open Mansa to update.	Abra o Mansa para atualizar.
 	{name} {v} is available	{name} {v} está disponível
 	{count} updates are available	{count} atualizações estão disponíveis
 	These notes weren't fetched (GitHub's request limit was reached). They're on the release page.	Estas notas não foram carregadas (o limite de requisições do GitHub foi atingido). Elas estão na página de lançamentos.
@@ -284,7 +281,7 @@ filter	Installed	Instalados
 @id	launcher.notes	Novidades
 @id	launcher.dismiss	Dispensar
 @id	settings.open	Configurações
-@id	settings.quit	Sair do ArtCraft Launcher
+@id	settings.quit	Sair do Mansa
 @id	view.grid	Grade
 @id	view.table	Tabela
 @id	filter.all	Todos
@@ -308,15 +305,14 @@ filter	Installed	Instalados
 @id	linux.preferred_kind	Instalar novos aplicativos como
 @id	tray.close_to_tray	Continuar na bandeja do sistema ao fechar a janela
 @id	tray.show_on_current_desktop	Mostrar a janela na área de trabalho atual
-@id	tray.login_item	Iniciar o ArtCraft Launcher ao fazer login
+@id	tray.login_item	Iniciar o Mansa ao fazer login
 @id	appearance.theme	Aparência
 
 # Tray (menu bar) menu and tooltip
-	Show ArtCraft Launcher	Mostrar ArtCraft Launcher
+	Show Mansa	Mostrar Mansa
 	Check for Updates	Verificar atualizações
-	Visit getartcraft.com	Visitar getartcraft.com
-	ArtCraft on GitHub	ArtCraft no GitHub
-	Join the ArtCraft Discord	Entrar no Discord da ArtCraft
+	Visit studio.creative.ps	Visitar studio.creative.ps
+	Creative Studio on GitHub	Creative Studio no GitHub
 	App details	Detalhes do aplicativo
 	Close (Esc)	Fechar (Esc)
 	Features	Recursos
@@ -330,4 +326,4 @@ filter	Installed	Instalados
 	Next picture (→)	Próxima imagem (→)
 	Loading pictures…	Carregando imagens…
 	Pictures couldn't be loaded. Reopen this page to try again.	Não foi possível carregar as imagens. Abra a página novamente para tentar de novo.
-@plural	ArtCraft Launcher · {n} update available|ArtCraft Launcher · {n} updates available	ArtCraft Launcher · {n} atualização disponível|ArtCraft Launcher · {n} atualizações disponíveis
+@plural	Mansa · {n} update available|Mansa · {n} updates available	Mansa · {n} atualização disponível|Mansa · {n} atualizações disponíveis

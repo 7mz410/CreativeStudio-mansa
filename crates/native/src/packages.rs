@@ -9,7 +9,7 @@ use artcraft_launcher_core::{CraftApp, InstallSource, version};
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Package {
     pub manager: InstallSource,
-    /// The package's name (`photocraft-bin`) or Flatpak app id.
+    /// The package's name (`tlween-bin`) or Flatpak app id.
     pub name: String,
     /// As the package manager reports it (`0.5.0-1`); empty when it doesn't say.
     pub version: String,
@@ -64,9 +64,9 @@ pub fn parse_flatpak_info(text: &str) -> Option<String> {
 }
 
 /// The package names a Craft App may be installed under with `manager`. On Arch the AUR carries
-/// each app three ways: built from source (`photocraft`), the release binary (`photocraft-bin`)
-/// and the latest commit (`photocraft-git`). Debian and RPM packages may use either the short stem
-/// (`photocraft`) or the reverse-DNS bundle id (`ai.storyteller.photocraft`).
+/// each app three ways: built from source (`tlween`), the release binary (`tlween-bin`)
+/// and the latest commit (`tlween-git`). Debian and RPM packages may use either the short stem
+/// (`tlween`) or the reverse-DNS bundle id (`ai.storyteller.tlween`).
 pub fn candidate_names(app: &CraftApp, manager: InstallSource) -> Vec<String> {
     match manager {
         InstallSource::Flatpak => vec![app.bundle_id()],
@@ -102,56 +102,55 @@ mod tests {
     #[test]
     fn reads_each_package_managers_listing() {
         assert_eq!(
-            parse_dpkg("photocraft|installed|0.5.0-1\nphotocraft:amd64|installed|0.6.0-1\nwordcraft|config-files|0.3.0-1\n"),
-            [("photocraft".into(), "0.5.0-1".into()), ("photocraft".into(), "0.6.0-1".into())]
+            parse_dpkg("tlween|installed|0.5.0-1\ntlween:amd64|installed|0.6.0-1\nklmat|config-files|0.3.0-1\n"),
+            [("tlween".into(), "0.5.0-1".into()), ("tlween".into(), "0.6.0-1".into())]
         );
-        assert_eq!(parse_rpm("gridcraft|0.3.0\n"), [("gridcraft".into(), "0.3.0".into())]);
-        assert_eq!(parse_pacman("photocraft-bin 0.5.0-1\nlinux 6.11.1.arch1-1\n").len(), 2);
+        assert_eq!(parse_rpm("arqam|0.3.0\n"), [("arqam".into(), "0.3.0".into())]);
+        assert_eq!(parse_pacman("tlween-bin 0.5.0-1\nlinux 6.11.1.arch1-1\n").len(), 2);
         assert_eq!(
-            parse_flatpak_list("ai.storyteller.wordcraft\t\nai.storyteller.cadcraft\t0.3.0\n"),
-            [("ai.storyteller.wordcraft".into(), String::new()), ("ai.storyteller.cadcraft".into(), "0.3.0".into())]
+            parse_flatpak_list("ai.storyteller.klmat\t\nai.storyteller.muhandes\t0.3.0\n"),
+            [("ai.storyteller.klmat".into(), String::new()), ("ai.storyteller.muhandes".into(), "0.3.0".into())]
         );
-        let info = "\nWordCraft - Word processor\n\n          ID: ai.storyteller.wordcraft\n     Version: 0.3.0\n      Branch: master\n";
+        let info = "\nklmat - Word processor\n\n          ID: ai.storyteller.klmat\n     Version: 0.3.0\n      Branch: master\n";
         assert_eq!(parse_flatpak_info(info).as_deref(), Some("0.3.0"));
         assert_eq!(parse_flatpak_info("Version: \n"), None);
     }
 
     #[test]
     fn candidate_names_cover_bundle_ids_for_deb_rpm_and_pacman() {
-        let photo = CraftApp::by_id("photocraft").unwrap();
+        let photo = CraftApp::by_id("tlween").unwrap();
         let deb_names = candidate_names(photo, InstallSource::Deb);
-        assert!(deb_names.contains(&"photocraft".to_string()));
-        assert!(deb_names.contains(&"ai.storyteller.photocraft".to_string()));
+        assert!(deb_names.contains(&"tlween".to_string()));
+        assert!(deb_names.contains(&"ai.storyteller.tlween".to_string()));
 
         let rpm_names = candidate_names(photo, InstallSource::Rpm);
-        assert!(rpm_names.contains(&"photocraft".to_string()));
-        assert!(rpm_names.contains(&"ai.storyteller.photocraft".to_string()));
+        assert!(rpm_names.contains(&"tlween".to_string()));
+        assert!(rpm_names.contains(&"ai.storyteller.tlween".to_string()));
 
         let pacman_names = candidate_names(photo, InstallSource::Pacman);
-        assert!(pacman_names.contains(&"photocraft".to_string()));
-        assert!(pacman_names.contains(&"photocraft-bin".to_string()));
-        assert!(pacman_names.contains(&"ai.storyteller.photocraft".to_string()));
+        assert!(pacman_names.contains(&"tlween".to_string()));
+        assert!(pacman_names.contains(&"tlween-bin".to_string()));
+        assert!(pacman_names.contains(&"ai.storyteller.tlween".to_string()));
     }
 
     #[test]
     fn finds_aur_packages_in_every_flavour() {
-        let photo = CraftApp::by_id("photocraft").unwrap();
-        let pdf = CraftApp::by_id("pdfcraft").unwrap();
-        let installed =
-            pkgs(InstallSource::Pacman, parse_pacman("linux 6.11.1.arch1-1\nphotocraft-git 0.3.0.r47.g47f9306-1\nprintcraft-bin 0.2.1-1\n"));
+        let photo = CraftApp::by_id("tlween").unwrap();
+        let pdf = CraftApp::by_id("sf7aat").unwrap();
+        let installed = pkgs(InstallSource::Pacman, parse_pacman("linux 6.11.1.arch1-1\ntlween-git 0.3.0.r47.g47f9306-1\nsf7aat-bin 0.2.1-1\n"));
         let hit = find(photo, &installed, &[InstallSource::Pacman]).unwrap();
-        assert_eq!(hit.name, "photocraft-git");
+        assert_eq!(hit.name, "tlween-git");
         assert_eq!(version_of(hit).unwrap().to_string(), "0.3.0");
-        // PdfCraft under its old name.
-        assert_eq!(find(pdf, &installed, &[InstallSource::Pacman]).unwrap().name, "printcraft-bin");
-        assert!(find(CraftApp::by_id("wordcraft").unwrap(), &installed, &[InstallSource::Pacman]).is_none());
+        // sf7aat under its old name.
+        assert_eq!(find(pdf, &installed, &[InstallSource::Pacman]).unwrap().name, "sf7aat-bin");
+        assert!(find(CraftApp::by_id("klmat").unwrap(), &installed, &[InstallSource::Pacman]).is_none());
     }
 
     #[test]
     fn prefers_managers_in_order_and_reads_revisions() {
-        let photo = CraftApp::by_id("photocraft").unwrap();
-        let mut installed = pkgs(InstallSource::Deb, parse_dpkg("photocraft|installed|0.5.0-1\n"));
-        installed.extend(pkgs(InstallSource::Flatpak, parse_flatpak_list("ai.storyteller.photocraft\t0.4.0\n")));
+        let photo = CraftApp::by_id("tlween").unwrap();
+        let mut installed = pkgs(InstallSource::Deb, parse_dpkg("tlween|installed|0.5.0-1\n"));
+        installed.extend(pkgs(InstallSource::Flatpak, parse_flatpak_list("ai.storyteller.tlween\t0.4.0\n")));
         let hit = find(photo, &installed, &[InstallSource::Deb, InstallSource::Flatpak]).unwrap();
         assert_eq!(hit.manager, InstallSource::Deb);
         // 0.5.0-1 is the 0.5.0 release, not a pre-release of it.

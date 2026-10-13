@@ -541,9 +541,9 @@ pub(crate) mod tests {
             std::fs::File::options().write(true).open(&p).unwrap().set_modified(old).unwrap();
             p
         };
-        let keep = make("photocraft-0.5.0-macos-universal.dmg.150000.part");
-        let legacy = make("photocraft-0.5.0-macos-universal.part");
-        let finished = make("photocraft-0.5.0-macos-universal.dmg");
+        let keep = make("tlween-0.5.0-macos-universal.dmg.150000.part");
+        let legacy = make("tlween-0.5.0-macos-universal.part");
+        let finished = make("tlween-0.5.0-macos-universal.dmg");
         let fresh = dir.path().join("x.part");
         std::fs::write(&fresh, b"x").unwrap();
         clean_downloads(dir.path(), DAYS_30, DAYS_7);
@@ -820,10 +820,10 @@ pub(crate) mod tests {
     #[ignore = "needs network access"]
     fn downloads_a_real_release_asset() {
         let http = Http::new().unwrap();
-        let Fetched::Body { text, .. } = http.get_api("https://api.github.com/repos/storytold/wordcraft/releases/latest", None).unwrap() else {
+        let Fetched::Body { text, .. } = http.get_api("https://api.github.com/repos/storytold/klmat/releases/latest", None).unwrap() else {
             panic!("no release")
         };
-        let release = artcraft_launcher_core::release::parse_github_release(&text, "storytold/wordcraft").unwrap();
+        let release = artcraft_launcher_core::release::parse_github_release(&text, "storytold/klmat").unwrap();
         let sums_url = &release.sums_asset().unwrap().url;
         let sums = artcraft_launcher_core::release::parse_sha256sums(&http.get_text(sums_url).unwrap().unwrap());
         let asset = release.assets.iter().find(|a| a.name.ends_with("freebsd-x86_64.tar.gz")).unwrap();
@@ -837,7 +837,7 @@ pub(crate) mod tests {
     /// Answers one request with `head` (status line and headers) and an empty body.
     fn answer_once(head: String) -> String {
         let listener = TcpListener::bind("127.0.0.1:0").unwrap();
-        let url = format!("http://{}/repos/storytold/photocraft/releases/latest", listener.local_addr().unwrap());
+        let url = format!("http://{}/repos/storytold/tlween/releases/latest", listener.local_addr().unwrap());
         std::thread::spawn(move || {
             let Ok((mut stream, _)) = listener.accept() else { return };
             let mut reader = BufReader::new(stream.try_clone().unwrap());
@@ -891,6 +891,6 @@ pub(crate) mod tests {
 
     #[test]
     fn partial_files_are_named_after_the_file_and_size() {
-        assert_eq!(part_path(Path::new("/d/photocraft.dmg"), 9), Path::new("/d/photocraft.dmg.9.part"));
+        assert_eq!(part_path(Path::new("/d/tlween.dmg"), 9), Path::new("/d/tlween.dmg.9.part"));
     }
 }

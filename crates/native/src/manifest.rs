@@ -50,7 +50,7 @@ mod tests {
         assert_eq!(Manifest::load(&path), Manifest::default());
         let mut m = Manifest::default();
         m.apps.insert(
-            "photocraft".into(),
+            "tlween".into(),
             Record { version: "0.5.0".into(), kind: PackageKind::AppImage, path: "/x/y".into(), installed_at: 1, files: vec![], needs_root: false },
         );
         m.save(&path).unwrap();

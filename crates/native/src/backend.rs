@@ -326,7 +326,7 @@ impl NativeBackend {
             restarting
         };
         if restarting {
-            let result = Err("ArtCraft Launcher is restarting to finish its update. Try again once it's back.".into());
+            let result = Err("Mansa is restarting to finish its update. Try again once it's back.".into());
             self.shared.emit(Event::JobFinished { app: app.id.to_string(), result });
             return;
         }
@@ -393,10 +393,8 @@ impl NativeBackend {
     fn update_launcher(&self) {
         let id = LAUNCHER_ID.to_string();
         let (Some(install), Some(platform)) = (self.self_install.clone(), self.platform) else {
-            self.shared.emit(Event::JobFinished {
-                app: id,
-                result: Err("this copy of ArtCraft Launcher can't update itself; download the new version instead".into()),
-            });
+            self.shared
+                .emit(Event::JobFinished { app: id, result: Err("this copy of Mansa can't update itself; download the new version instead".into()) });
             return;
         };
         let Some(release) = self.shared.launcher_release.lock().unwrap_or_else(PoisonError::into_inner).clone() else { return };
@@ -561,7 +559,7 @@ fn restart_blocked(mut busy: Vec<&str>) -> String {
         _ => (busy.join(", "), "were", "them"),
     };
     format!(
-        "ArtCraft Launcher didn't restart to update: {names} {were} still installing. Answer or close any password prompt, \
+        "Mansa didn't restart to update: {names} {were} still installing. Answer or close any password prompt, \
          let {them} finish or cancel {them}, then press Update and restart again."
     )
 }
@@ -1104,7 +1102,7 @@ mod tests {
     fn feed() -> Feed {
         Feed::parse(
             r#"{"release_info": {"apps": {
-            "photocraft": {"repo": "storytold/photocraft", "latest_release": {"tag": "v0.6.0"}, "app_last_fetched": "2026-10-09T13:00:00Z"}
+            "tlween": {"repo": "7mz410/CreativeStudio-tlween", "latest_release": {"tag": "v0.6.0"}, "app_last_fetched": "2026-10-09T13:00:00Z"}
         }}}"#,
         )
         .unwrap()
@@ -1154,8 +1152,8 @@ mod tests {
 
     #[test]
     fn a_local_mirror_answers_for_every_app_on_its_own() {
-        let photo = CraftApp::by_id("photocraft").unwrap();
-        let word = CraftApp::by_id("wordcraft").unwrap();
+        let photo = CraftApp::by_id("tlween").unwrap();
+        let word = CraftApp::by_id("klmat").unwrap();
         let feed = feed().with_mirror("http://127.0.0.1:8787/");
         // Listed: found, even long after the sync.
         let (latest, _, _) = mirror_latest(photo, Some(&feed), NOW + 30 * 86_400);
@@ -1175,17 +1173,17 @@ mod tests {
     fn github_is_only_the_fallback_and_is_asked_rarely() {
         let github = CountingGitHub::default();
         let shared = shared();
-        let photo = CraftApp::by_id("photocraft").unwrap();
-        let word = CraftApp::by_id("wordcraft").unwrap();
+        let photo = CraftApp::by_id("tlween").unwrap();
+        let word = CraftApp::by_id("klmat").unwrap();
         let feed = feed();
 
-        // The feed vouches for PhotoCraft: GitHub isn't asked.
+        // The feed vouches for tlween: GitHub isn't asked.
         let (latest, _, used) = latest_for(photo, Some(&feed), LOADED, &github, &shared, false, false, NOW);
         assert!(matches!(latest, Some(LatestRelease::Found(ref r)) if r.tag == "v0.6.0"));
         assert_eq!(used, Some(Source::Feed));
         assert_eq!(github.0.load(Ordering::SeqCst), 0);
 
-        // The feed doesn't list WordCraft: GitHub is asked once…
+        // The feed doesn't list klmat: GitHub is asked once…
         let (_, _, used) = latest_for(word, Some(&feed), LOADED, &github, &shared, false, false, NOW);
         assert_eq!(used, Some(Source::GitHubApi));
         assert_eq!(github.0.load(Ordering::SeqCst), 1);
@@ -1210,9 +1208,9 @@ mod tests {
         assert_eq!(used, Some(Source::GitHubApi));
     }
 
-    const APP: &str = "photocraft";
+    const APP: &str = "tlween";
 
-    /// A PhotoCraft release with one file per platform and format, so whichever this machine
+    /// A tlween release with one file per platform and format, so whichever this machine
     /// installs is there.
     fn release(version: &str) -> Release {
         let suffixes = ["-portable.zip", ".tar.gz", ".msi", ".dmg", ".AppImage", ".deb", ".rpm", ".flatpak"];
@@ -1360,20 +1358,20 @@ mod tests {
     #[test]
     fn the_launcher_gives_up_waiting_and_names_the_busy_apps() {
         let jobs = Mutex::new(HashMap::new());
-        for id in [LAUNCHER_ID, "photocraft"] {
+        for id in [LAUNCHER_ID, "tlween"] {
             jobs.lock().unwrap().insert(id.to_string(), Arc::new(Stop::default()));
         }
         let restarting = AtomicBool::new(false);
         let error = claim_restart(&jobs, &restarting, &Stop::default(), Duration::from_millis(300), &mut || {}).unwrap_err();
-        assert!(error.contains("PhotoCraft was still installing") && error.contains("cancel it"), "{error}");
+        assert!(error.contains("tlween was still installing") && error.contains("cancel it"), "{error}");
         assert!(!restarting.load(Ordering::SeqCst));
-        assert!(restart_blocked(vec!["WordCraft", "FilmCraft"]).contains("FilmCraft, WordCraft were still installing"));
+        assert!(restart_blocked(vec!["klmat", "tsweer"]).contains("klmat, tsweer were still installing"));
     }
 
     #[test]
     fn the_launcher_restarts_only_once_every_other_job_has_ended() {
         let jobs = Mutex::new(HashMap::new());
-        for id in [LAUNCHER_ID, "photocraft", "filmcraft"] {
+        for id in [LAUNCHER_ID, "tlween", "tsweer"] {
             jobs.lock().unwrap().insert(id.to_string(), Arc::new(Stop::default()));
         }
         let restarting = AtomicBool::new(false);
@@ -1384,10 +1382,10 @@ mod tests {
             let claim = scope.spawn(move || claim_restart(jobs, restarting, stop, RESTART_WAIT, &mut || waiting.send(()).unwrap()));
             waits.recv().unwrap();
             // One install ends; another is still running or queued.
-            jobs.lock().unwrap().remove("photocraft");
+            jobs.lock().unwrap().remove("tlween");
             std::thread::sleep(Duration::from_millis(250));
             assert!(!claim.is_finished() && !restarting.load(Ordering::SeqCst));
-            jobs.lock().unwrap().remove("filmcraft");
+            jobs.lock().unwrap().remove("tsweer");
             assert_eq!(claim.join().unwrap(), Ok(()));
         });
         assert!(restarting.load(Ordering::SeqCst));
@@ -1402,7 +1400,7 @@ mod tests {
     #[test]
     fn a_cancelled_launcher_update_stops_waiting_and_claims_nothing() {
         let jobs =
-            Mutex::new(HashMap::from([(LAUNCHER_ID.to_string(), Arc::new(Stop::default())), ("photocraft".to_string(), Arc::new(Stop::default()))]));
+            Mutex::new(HashMap::from([(LAUNCHER_ID.to_string(), Arc::new(Stop::default())), ("tlween".to_string(), Arc::new(Stop::default()))]));
         let restarting = AtomicBool::new(false);
         let stop = Stop::default();
         let (waiting, waits) = mpsc::channel();

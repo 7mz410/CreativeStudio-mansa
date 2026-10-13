@@ -112,7 +112,7 @@ pub struct Settings {
     pub notified: BTreeMap<String, String>,
     /// Unix seconds of the last finished check.
     pub last_check: Option<i64>,
-    /// Catalog ids of apps hidden from the main lists (`photocraft`, …).
+    /// Catalog ids of apps hidden from the main lists (`tlween`, …).
     pub hidden: std::collections::BTreeSet<String>,
 }
 
