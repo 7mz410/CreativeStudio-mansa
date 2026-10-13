@@ -165,7 +165,7 @@ pub fn update(
     phase: &mut dyn FnMut(JobPhase),
     last: &dyn Fn() -> Result<(), String>,
 ) -> Result<(), String> {
-    let (asset, _) = pick_asset(release, &[LAUNCHER.id], platform, &[install.kind()])
+    let (asset, _) = pick_asset(release, artcraft_launcher_core::catalog::LAUNCHER_STEMS, platform, &[install.kind()])
         .ok_or_else(|| format!("Mansa {} has no {} for {}", release.version_label(), install.kind().label(), platform.label()))?;
     let asset = asset.clone();
     let mut job = Job { http, paths, stop, phase };

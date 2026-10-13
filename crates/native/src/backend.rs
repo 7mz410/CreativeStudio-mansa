@@ -5,7 +5,7 @@ use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::{Arc, Mutex, PoisonError};
 use std::time::{Duration, Instant};
 
-use artcraft_launcher_core::catalog::{LAUNCHER, LAUNCHER_ID};
+use artcraft_launcher_core::catalog::{LAUNCHER, LAUNCHER_ID, LAUNCHER_STEMS};
 use artcraft_launcher_core::platform::{Arch, Os, Platform, pick_asset};
 use artcraft_launcher_core::protocol::{
     Backend, BackendOptions, CANCELLED, Capabilities, Command, Event, INSTALL_CANCELLED, JobPhase, LatestRelease, Origin, PAUSED, PausedDownload,
@@ -693,7 +693,7 @@ pub fn launcher_download(release: &Release, platform: Platform) -> Option<String
         Os::Linux => &[artcraft_launcher_core::PackageKind::AppImage, artcraft_launcher_core::PackageKind::Deb],
         _ => platform.default_kinds(),
     };
-    pick_asset(release, &[LAUNCHER_ID], platform, kinds).map(|(a, _)| a.url.clone())
+    pick_asset(release, LAUNCHER_STEMS, platform, kinds).map(|(a, _)| a.url.clone())
 }
 
 #[cfg(test)]

@@ -286,6 +286,16 @@ mod tests {
     }
 
     #[test]
+    fn the_launcher_finds_its_new_and_old_asset_names() {
+        let stems = crate::catalog::LAUNCHER_STEMS;
+        for name in ["mansa-1.0.2-macos-aarch64.dmg", "artcraft-launcher-1.0.1-macos-aarch64.dmg"] {
+            let r = release(&[name]);
+            let got = pick_asset(&r, stems, Platform { os: Os::MacOs, arch: Arch::Arm64 }, &[PackageKind::Dmg]).map(|(a, _)| a.name.clone());
+            assert_eq!(got.as_deref(), Some(name));
+        }
+    }
+
+    #[test]
     fn picks_the_native_build_first_and_falls_back_to_emulation() {
         let r = release(PHOTO);
         let pick = |os, arch, kinds: &[PackageKind]| pick_asset(&r, &["tlween"], Platform { os, arch }, kinds).map(|(a, _)| a.name.clone());

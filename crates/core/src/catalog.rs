@@ -238,6 +238,9 @@ pub const LAUNCHER: CraftApp = app(
 pub const LAUNCHER_REPO: &str = "7mz410/CreativeStudio-mansa";
 /// The launcher's own asset stem.
 pub const LAUNCHER_ID: &str = "artcraft-launcher";
+/// The stems the launcher's own release assets use, current first: `mansa-<ver>-…` since 1.0.2,
+/// `artcraft-launcher-<ver>-…` before.
+pub const LAUNCHER_STEMS: &[&str] = &["mansa", LAUNCHER_ID];
 
 #[cfg(test)]
 mod tests {
