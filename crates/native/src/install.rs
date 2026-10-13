@@ -874,8 +874,8 @@ pub mod macos {
     /// What a new copy must prove before it replaces anything. The checksum shows the download is
     /// the file the release lists; these show the app inside is the one the release promises.
     pub struct Expect<'a> {
-        /// The team whose Developer ID signature the bundle must carry. `None` only in tests,
-        /// which build unsigned bundles.
+        /// The team whose Developer ID signature the bundle must carry. `None` for now: Creative
+        /// Studio's releases are ad-hoc signed (see `Expect::release`).
         pub team: Option<&'a str>,
         /// The release's version, which the bundle must report. `None` when the tag isn't one.
         pub version: Option<&'a Version>,
@@ -883,7 +883,10 @@ pub mod macos {
 
     impl<'a> Expect<'a> {
         pub fn release(release: &'a Release) -> Self {
-            Self { team: Some(TEAM_ID), version: release.version.as_ref() }
+            // ponytail: Creative Studio's apps are ad-hoc signed (no Apple Developer ID yet), so no
+            // team is required; the published SHA256 still pins the download. Set Some(our team)
+            // once the releases are Developer ID signed.
+            Self { team: None, version: release.version.as_ref() }
         }
     }
 
@@ -1714,7 +1717,9 @@ mod tests {
             let image = dmg(dir.path(), "0.6.0");
             let release = Release { tag: "v0.6.0".into(), version: version::parse("0.6.0"), ..Release::default() };
 
-            let result = install_dmg(tlween(), &image, Some(&existing), &Paths::under(dir.path()), &Expect::release(&release));
+            // With a team required (once the releases are Developer ID signed).
+            let expect = Expect { team: Some(TEAM_ID), ..Expect::release(&release) };
+            let result = install_dmg(tlween(), &image, Some(&existing), &Paths::under(dir.path()), &expect);
             assert_eq!(result, Err("the app isn't signed by its developer, so it wasn't installed".into()));
             assert_eq!(std::fs::read_to_string(current.join("Contents/MacOS/tlween")).unwrap(), "0.5.0");
             assert!(!apps.join(".tlween.app.partial").exists());
