@@ -12,10 +12,7 @@ use crate::widgets::{self, Cell, Kind};
 
 impl LauncherUi {
     pub(crate) fn dialogs(&mut self, ctx: &egui::Context, host: &mut dyn Host) {
-        let Some(dialog) = self.dialog.clone() else {
-            self.alert_popup(ctx);
-            return;
-        };
+        let Some(dialog) = self.dialog.clone() else { return };
         let t = Tokens::get(ctx);
         // An area is laid out in the size it had last frame, so dialogs can't share one id: the
         // uninstall prompt would open as tall as Settings and never shrink (#88).
@@ -30,39 +27,6 @@ impl LauncherUi {
         };
         if close || response.should_close() {
             self.dialog = None;
-        }
-    }
-
-    /// The first alert from the release feed the user hasn't acknowledged, as a popup.
-    fn alert_popup(&mut self, ctx: &egui::Context) {
-        let Some(alert) = self.alerts.iter().find(|a| !self.settings.dismissed_notices.contains(&a.id)).cloned() else { return };
-        let t = Tokens::get(ctx);
-        let modal = egui::Modal::new(egui::Id::new("feed_alert").with(&alert.id))
-            .frame(egui::Frame::new().fill(t.bg).stroke(egui::Stroke::new(1.0, t.line_strong)).shadow(theme::shadow(&t)).inner_margin(24));
-        let mut ok = false;
-        modal.show(ctx, |ui| {
-            ui.set_width(440.0f32.min(ctx.content_rect().width() - 80.0));
-            ui.label(RichText::new(&alert.title).size(18.0).family(theme::semibold()).color(t.ink_strong));
-            ui.add_space(6.0);
-            egui::ScrollArea::vertical().max_height(ctx.content_rect().height() * 0.5).show(ui, |ui| {
-                ui.add(egui::Label::new(RichText::new(&alert.body).color(t.muted)).wrap());
-            });
-            ui.add_space(14.0);
-            // A row: a right-to-left layout straight in the column would fill the height left.
-            ui.horizontal(|ui| {
-                ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
-                    ok = widgets::button(ui, tl!("OK"), Kind::Primary, 90.0).clicked();
-                    if let Some(link) = &alert.link
-                        && widgets::button(ui, tl!("Open link"), Kind::Secondary, 110.0).on_hover_text(link.as_str()).clicked()
-                    {
-                        ui.ctx().open_url(egui::OpenUrl::new_tab(link.clone()));
-                    }
-                });
-            });
-        });
-        // Only OK acknowledges it: Escape or a click outside leaves it for later.
-        if ok {
-            self.settings.dismissed_notices.insert(alert.id);
         }
     }
 

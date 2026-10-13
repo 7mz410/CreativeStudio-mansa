@@ -151,12 +151,6 @@ pub fn release_from_sums(repo: &str, tag: &str, sums: &[(String, String)]) -> Re
     }
 }
 
-/// The tag in a `https://github.com/<repo>/releases/tag/<tag>` redirect target.
-pub fn tag_from_redirect(location: &str, repo: &str) -> Option<String> {
-    let rest = location.strip_prefix(&format!("https://github.com/{repo}/releases/tag/"))?;
-    (!rest.is_empty() && rest.len() <= 64 && rest.bytes().all(|b| b.is_ascii_alphanumeric() || b"._-+".contains(&b))).then(|| rest.to_string())
-}
-
 /// Reads `sha256sum` output: `<hex>  <name>` (or `<hex> *<name>`) per line.
 pub fn parse_sha256sums(text: &str) -> Vec<(String, String)> {
     text.lines()
@@ -241,12 +235,9 @@ mod tests {
     }
 
     #[test]
-    fn reads_checksums_and_redirects() {
+    fn reads_checksums() {
         let sums = parse_sha256sums(&format!("{HASH}  tlween-0.5.0-macos-universal.dmg\n{HASH} *b.zip\nnot a line\n{HASH}  ../escape\n"));
         assert_eq!(sums, [(HASH.to_string(), "tlween-0.5.0-macos-universal.dmg".to_string()), (HASH.to_string(), "b.zip".to_string())]);
-        assert_eq!(tag_from_redirect("https://github.com/storytold/tlween/releases/tag/v0.5.0", REPO).as_deref(), Some("v0.5.0"));
-        assert_eq!(tag_from_redirect("https://github.com/storytold/tlween/releases", REPO), None);
-        assert_eq!(tag_from_redirect("https://evil/storytold/tlween/releases/tag/v1", REPO), None);
         let r = release_from_sums(REPO, "v0.5.0", &sums);
         assert_eq!(r.assets[0].url, "https://github.com/storytold/tlween/releases/download/v0.5.0/tlween-0.5.0-macos-universal.dmg");
         assert_eq!(r.version, Some(Version::new(0, 5, 0)));

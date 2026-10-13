@@ -1,4 +1,4 @@
-//! HTTPS requests: small JSON/text answers, redirect probes, and verified downloads.
+//! HTTPS requests: small JSON/text answers, and verified downloads.
 
 use std::io::{Read, Write};
 use std::path::Path;
@@ -32,21 +32,8 @@ pub enum Fetched {
 #[derive(Clone)]
 pub struct Http {
     small: ureq::Agent,
-    /// ArtCraft's release feed: a short timeout, so a slow server never holds up a check.
-    feed: ureq::Agent,
-    no_redirect: ureq::Agent,
     download: ureq::Agent,
     token: Option<String>,
-}
-
-/// Why ArtCraft's release feed couldn't be read.
-#[derive(Debug)]
-pub struct FeedError {
-    pub why: String,
-    /// The server answered HTTP 429 Too Many Requests.
-    pub throttled: bool,
-    /// The server's `Retry-After`, in seconds.
-    pub retry_after: Option<i64>,
 }
 
 impl Http {
@@ -65,25 +52,6 @@ impl Http {
             .user_agent(USER_AGENT)
             .build()
             .new_agent();
-        let feed = ureq::Agent::config_builder()
-            .tls_config(tls())
-            .proxy(proxy.clone())
-            .timeout_connect(Some(Duration::from_secs(5)))
-            .timeout_global(Some(Duration::from_secs(10)))
-            .http_status_as_error(false)
-            .user_agent(USER_AGENT)
-            .build()
-            .new_agent();
-        let no_redirect = ureq::Agent::config_builder()
-            .tls_config(tls())
-            .proxy(proxy.clone())
-            .timeout_global(Some(Duration::from_secs(20)))
-            .http_status_as_error(false)
-            .max_redirects(0)
-            .max_redirects_will_error(false)
-            .user_agent(USER_AGENT)
-            .build()
-            .new_agent();
         let download = ureq::Agent::config_builder()
             .tls_config(tls())
             .proxy(proxy.clone())
@@ -98,7 +66,7 @@ impl Http {
         // An optional token raises GitHub's limit from 60 to 5000 requests an hour. Only ever sent
         // to api.github.com.
         let token = std::env::var("ARTCRAFT_LAUNCHER_GITHUB_TOKEN").ok().map(|t| t.trim().to_string()).filter(|t| !t.is_empty());
-        Ok(Self { small, feed, no_redirect, download, token })
+        Ok(Self { small, download, token })
     }
 
     /// GET a GitHub API resource, revalidating with `etag` when given.
@@ -137,19 +105,6 @@ impl Http {
         }
     }
 
-    /// ArtCraft's release feed, or why it couldn't be read. Never takes more than ~10 seconds.
-    pub fn get_feed(&self, url: &str) -> Result<String, FeedError> {
-        let failed = |why: String| FeedError { why, throttled: false, retry_after: None };
-        let mut resp =
-            self.feed.get(url).header("Accept", "application/json").call().map_err(|e| failed(format!("couldn't reach {} ({e})", host(url))))?;
-        // Seconds only; an HTTP date falls back to our own backoff.
-        let retry_after = resp.headers().get("retry-after").and_then(|v| v.to_str().ok()).and_then(|r| r.trim().parse::<i64>().ok());
-        match resp.status().as_u16() {
-            200 => resp.body_mut().with_config().limit(MAX_SMALL).read_to_string().map_err(|e| failed(format!("unreadable answer ({e})"))),
-            s => Err(FeedError { why: format!("{} answered HTTP {s}", host(url)), throttled: s == 429, retry_after }),
-        }
-    }
-
     /// GET a small text file (following redirects).
     pub fn get_text(&self, url: &str) -> Result<Option<String>, String> {
         let mut resp = self.small.get(url).call().map_err(|e| format!("couldn't reach {} ({e})", host(url)))?;
@@ -176,16 +131,6 @@ impl Http {
                 let body = resp.body_mut().with_config().limit(max as u64 + 1).read_to_vec().map_err(|e| format!("unreadable answer ({e})"))?;
                 if body.len() > max { Err(too_big()) } else { Ok(Some(body)) }
             }
-            404 => Ok(None),
-            s => Err(format!("{} answered HTTP {s}", host(url))),
-        }
-    }
-
-    /// Where `url` redirects to, without following it.
-    pub fn redirect_target(&self, url: &str) -> Result<Option<String>, String> {
-        let resp = self.no_redirect.head(url).call().map_err(|e| format!("couldn't reach {} ({e})", host(url)))?;
-        match resp.status().as_u16() {
-            300..=399 => Ok(resp.headers().get("location").and_then(|v| v.to_str().ok()).map(str::to_string)),
             404 => Ok(None),
             s => Err(format!("{} answered HTTP {s}", host(url))),
         }

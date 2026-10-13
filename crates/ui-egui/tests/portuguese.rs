@@ -61,7 +61,7 @@ fn events() -> Vec<Event> {
     let mut ev = Vec::new();
     for (i, app) in SUITE.iter().enumerate() {
         let latest = LatestRelease::Found(release(app.id, "0.5.0", NOW - 40 * 86_400 - i as i64 * 600));
-        ev.push(Event::Latest { app: app.id.into(), latest, from: Origin::ArtCraftApi });
+        ev.push(Event::Latest { app: app.id.into(), latest, from: Origin::GitHub });
         let installed = matches!(app.id, "tlween" | "lamasat").then(|| Installed {
             version: version::parse(if app.id == "tlween" { "0.4.1" } else { "0.5.0" }),
             source: InstallSource::Msi,
@@ -71,7 +71,7 @@ fn events() -> Vec<Event> {
         ev.push(Event::Detected { app: app.id.into(), installed });
     }
     ev.push(Event::Progress { app: "tsweer".into(), phase: JobPhase::Verifying });
-    ev.push(Event::CheckFinished { at: NOW - 180, source: Source::Feed, rate_limited_until: None });
+    ev.push(Event::CheckFinished { at: NOW - 180, source: Source::GitHubApi, rate_limited_until: None });
     ev.push(Event::JobFinished { app: "lamasat".into(), result: Ok("lamasat updated to 0.5.0".into()) });
     ev
 }
@@ -106,7 +106,7 @@ fn portuguese_ui_translates_labels_dates_and_messages() {
     h.get_by_label("Edição de imagens");
     h.get_by_label("Atualizar para 0.5.0");
     h.get_by_label_contains("Conferindo a soma de verificação…");
-    h.get_by_label_contains("Verificado há 3 min · via ArtCraft API");
+    h.get_by_label_contains("Verificado há 3 min · via GitHub");
     h.get_by_label("lamasat atualizado para 0.5.0");
 
     let mut table = harness(ViewMode::Table);

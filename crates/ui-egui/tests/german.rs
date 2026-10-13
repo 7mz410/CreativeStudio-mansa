@@ -83,10 +83,10 @@ fn events() -> Vec<Event> {
         ev.push(Event::Latest {
             app: (*id).into(),
             latest: LatestRelease::Found(release(id, v, NOW - 86_400 - i as i64 * 600)),
-            from: Origin::ArtCraftApi,
+            from: Origin::GitHub,
         });
     }
-    ev.push(Event::Latest { app: "7rrek".into(), latest: LatestRelease::None, from: Origin::ArtCraftApi });
+    ev.push(Event::Latest { app: "7rrek".into(), latest: LatestRelease::None, from: Origin::GitHub });
     let installed = [("tlween", "0.4.1"), ("lamasat", "0.4.0"), ("klmat", "0.3.0"), ("effectat", "0.5.0")];
     for app in &SUITE {
         let inst = installed.iter().find(|(id, _)| *id == app.id).map(|(_, v)| Installed {
@@ -166,7 +166,7 @@ fn german_switches_persists_and_keeps_install_actions() {
     h.get_by_label("Fertig").click();
     h.run_steps(3);
     h.get_by_label("Bildbearbeitung");
-    h.get_by_label_contains("Zuletzt geprüft: vor 3 Min. · über ArtCraft API");
+    h.get_by_label_contains("Zuletzt geprüft: vor 3 Min. · über GitHub");
     h.get_by_label("Auf 0.5.0 aktualisieren");
     // Product names stay in English.
     h.get_by_label("Launcher");

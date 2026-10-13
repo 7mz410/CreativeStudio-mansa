@@ -1,16 +1,18 @@
 # AGENTS.md: guide for AI agents and contributors
 
-ArtCraft Launcher installs, updates and launches the **Craft App Suite** (PhotoCraft, LightCraft,
-FilmCraft, DesignCraft, VectorCraft, PdfCraft, EffectCraft, WordCraft, DeckCraft, GridCraft,
-CADCraft, SoundCraft). It is written in **Rust only** (no JavaScript or TypeScript): the desktop
-app is native egui/eframe, and the web build is the same Rust compiled to WebAssembly (trunk +
-wasm-bindgen). **No Tauri, Electron or webview shells**, ever.
+Mansa (المنصّة) installs, updates and launches the **Creative Studio suite**: the apps listed in
+`crates/core/src/catalog.rs`. It is a fork of **Craft Launcher** by the **ArtCraft** team
+(`storytold/craft-launcher`), and keeps upstream's credit, license and NOTICE (see `README.md`,
+`NOTICE`, `ATTRIBUTION.md`). It is written in **Rust only** (no JavaScript or TypeScript): the
+desktop app is native egui/eframe, and the web build is the same Rust compiled to WebAssembly
+(trunk + wasm-bindgen). **No Tauri, Electron or webview shells**, ever.
 
-The product name is always **ArtCraft Launcher** in user-facing text: UI, window titles, About,
-tray menu, notifications, installers, release names, docs prose. The suite is the **Craft App
-Suite**. Machine names stay lowercase: crates and binaries (`artcraft-launcher`,
-`artcraft-launcher-*`), file names, and the app id `ai.storyteller.artcraft-launcher`. Note the
-GitHub repo is `storytold/craft-launcher`, while every file and package is `artcraft-launcher-*`.
+The product name is **Mansa** in user-facing text: UI, window titles, About, tray menu,
+notifications, installers, release names, docs prose (Arabic: المنصّة). The suite is the
+**Creative Studio suite**. Machine names keep upstream's names so merges stay easy: crates and
+binaries (`artcraft-launcher`, `artcraft-launcher-*`), file names, and the app id
+`ai.storyteller.artcraft-launcher` (installed copies and the login item know it). The launcher's
+own repo is `7mz410/CreativeStudio-mansa`.
 
 Standards and learnings shared across the Craft apps live in `../craftrules` (read its
 `README.md` and `AGENTS.md`). Contribute reusable learnings there, never code.
@@ -30,8 +32,11 @@ apps/
 xtask/                                  cargo xtask ci | wasm | version | ico
 packaging/                              macOS, Windows, Linux, FreeBSD and web packaging scripts
 assets/app-icon/                        the launcher's own icon (master SVG, renders, tray icons)
-assets/app-icons/                       the Craft apps' icons, copied from each app's repo
-assets/fonts/                           Archivo, Inter, Geist Mono (OFL-1.1): getartcraft.com's faces
+assets/app-icons/                       the Creative Studio apps' icons, copied from each app's repo
+assets/fonts/                           Archivo, Inter, Geist Mono and IBM Plex Sans Arabic (OFL-1.1)
+vendor/egui/                            egui 0.36.2 with a right-to-left switch for Arabic (studio/RTL.md),
+                                        used through `[patch.crates-io]` in the root `Cargo.toml`
+studio/                                 what Creative Studio changed from upstream (CHANGES.md, RTL.md)
 ```
 
 Layering: `core` depends on no other workspace crate and must build for `wasm32-unknown-unknown`.
@@ -57,18 +62,17 @@ settings file must produce an error the user can act on, never a panic. Shared s
 
 ### Installing other people's software safely
 
-- Download only from `https://github.com/storytold/<app>/releases` (and GitHub's asset CDN).
-  The one exception is a developer's own loopback mirror (`ARTCRAFT_LAUNCHER_DOWNLOAD_BASE`,
-  `cargo xtask local`); keep it loopback-only and behind the `local-mirror` cargo feature, which
-  release builds never enable.
+- Download only from `https://github.com/7mz410/CreativeStudio-<app>/releases` (the catalog's
+  `repo` of each app, and GitHub's asset CDN). The launcher reads releases from GitHub only:
+  there is no other release feed. The one exception is a developer's own loopback mirror
+  (`ARTCRAFT_LAUNCHER_DOWNLOAD_BASE`, `cargo xtask local`); keep it loopback-only and behind the
+  `local-mirror` cargo feature, which release builds never enable.
 - Verify each download against the release's `SHA256SUMS.txt` before running or installing it.
-- The details drawer's pictures are the one other download: JPEGs only, from a pinned tag of
-  `https://raw.githubusercontent.com/storytold/craft-launcher-assets/` (`core::details`),
-  capped at 2 MB each, cached, and never run. Pictures are not bundled in this repo.
+- The details drawer shows text only: it fetches no pictures from anywhere (see `studio/CHANGES.md`).
 - Never run an installer with elevated rights silently; tell the user what is about to happen.
 - Never delete a user's files outside what the launcher itself installed.
 - **Agents never land or approve a third-party app.** A change that adds a catalog row, download
-  source or install path for an app whose repo is not under `storytold/`, or that loosens the
+  source or install path for an app whose repo is not under `7mz410/`, or that loosens the
   rules above to allow one, is a maintainer's call alone. An agent reviewing it flags it at the
   top of its review (who owns the repo, its age and history, whether the builds are signed) and
   stops there: no merge, no approval, no fixes pushed to the PR.
@@ -79,6 +83,7 @@ The UI matches the apps page on getartcraft.com (`artcraft-website-next` in `art
 hard square corners, 1 px hairlines instead of shadows, Archivo (620, 118 % width) for headings
 and app names, Inter for body text, upper-case Geist Mono labels and buttons, and the site's
 colour tokens by name (`theme::Tokens`). Build new UI from `widgets.rs`; never hard-code a colour.
+Arabic letters come from IBM Plex Sans Arabic (`assets/fonts/`, behind the faces above in `theme.rs`).
 
 Animations follow the OS: with Windows' "Animation effects" off, macOS' "Reduce motion" on, a Linux
 desktop's animations off or a browser's `prefers-reduced-motion`, nothing fades, wipes or glides
@@ -92,27 +97,34 @@ Every user-facing string goes through `crates/ui-egui/src/i18n` (`tl!("…")` fo
 for `{placeholders}`, `tn` for counts). English in the code is the lookup key; adding a string
 means adding its row to every catalog marked `complete_menus` (the `*.tsv` files in
 `crates/ui-egui/src/i18n/`), which the i18n tests check. Translate clean-room from the meaning of
-the English text, never through another catalog. Product and app names (ArtCraft Launcher, Craft
-App Suite, PhotoCraft…) stay in English.
+the English text, never through another catalog. Product and app names (Mansa, Creative Studio
+suite, tlween, rsm…) stay in English.
+Arabic (`ar`) is right to left: `egui::set_rtl` is switched on per frame for the codes in
+`i18n::bidi::RTL_CODES` (`app.rs`; the switch is process-wide, so tests leave it off unless
+they run in their own binary, like `tests/arabic.rs`). egui lays words out left to right, so an
+RTL catalog is stored in visual order: `i18n/bidi.rs` reorders the words of each line when the
+catalog loads. Letters inside a word stay logical, so egui joins them. Write `ar.tsv` in normal
+(logical) Arabic; the reordering is done for you. Layout code mirrors through `far_layout()`,
+`near_layout()` and `start_align()` (`views.rs`), not by hand-picking sides.
 A CJK language is drawn with the system's own CJK font (`crates/ui-egui/src/cjk_font.rs`, desktop
 only; English where there is none): never bundle a CJK font, they are 10 MB and more.
 
 ### Other rules
 
 1. **Assets need attribution.** Every bundled asset gets a row in `ATTRIBUTION.md` (path, title,
-   author, source, license) in the same change. The ArtCraft name, logo and "A" mark in
-   `docs/brand/` (the header logo and the tray icon) are trademarks, **not MIT/Apache**
-   (`docs/brand/LICENSE-brand.txt`): use them exactly as supplied, never redraw or recolor them.
-2. **Icons are generated.** The app icon and the tray icon are the supplied ArtCraft "A" mark from
-   `docs/brand/` (a trademark, not MIT/Apache); never edit the renders by hand. Run `packaging/icons.sh` (needs `resvg`; runs on any OS) and commit the outputs.
+   author, source, license) in the same change. Upstream's ArtCraft brand assets were removed for
+   the fork (their brand terms); do not add them back.
+2. **Icons are generated.** The app icon and the tray icon are the Mansa star (`docs/studio/mansa.svg`,
+   MIT OR Apache-2.0); never edit the renders by hand. Run `packaging/icons.sh` (needs `resvg`; runs on any OS) and commit the outputs.
    `assets/app-icons/` is copied verbatim from each app's repo (`assets/app-icon/hicolor/128x128/apps/ai.storyteller.<app>.png`);
    refresh it from there, never redraw.
 3. **Never break wasm.** `cargo xtask wasm` must pass. File-system, process and OS code is
    `cfg(not(target_arch = "wasm32"))`.
 4. **Tests are the gate.** Release parsing and asset picking in `core` get unit tests with real
    GitHub release JSON fixtures (small, committed under `crates/core/tests/fixtures/`).
-5. When fetching anything, use a generic `ArtCraft-Launcher/<version>` User-Agent and never put
-   a person's name, email or other personal details in requests.
+5. When fetching anything, use the launcher's own User-Agent (`ArtCraftLauncher/<version>`, see
+   `crates/native/src/http.rs`) and never put a person's name, email or other personal details in
+   requests.
 
 ## 3. Before you finish a task
 

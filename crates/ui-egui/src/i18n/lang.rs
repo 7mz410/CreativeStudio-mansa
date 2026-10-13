@@ -231,7 +231,14 @@ pub static LANGUAGES: [LangInfo; 12] = [
 
 impl LangInfo {
     pub(super) fn catalog(&self) -> &Catalog {
-        self.catalog.get_or_init(|| Catalog::parse(self.source))
+        self.catalog.get_or_init(|| {
+            // Creative Studio: a right-to-left catalog is stored in visual order (i18n/bidi.rs).
+            if super::bidi::RTL_CODES.contains(&self.code) {
+                Catalog::parse(&super::bidi::visual_catalog(self.source))
+            } else {
+                Catalog::parse(self.source)
+            }
+        })
     }
 }
 

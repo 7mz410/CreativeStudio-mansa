@@ -3,26 +3,12 @@
 //! The text is compiled in, so it works offline and on the web, and nothing from the network is
 //! ever shown as page copy. What changes with every release (version, date, size, notes) comes
 //! from the GitHub release instead. An app without an entry here simply has no details page.
-//!
-//! The pictures are not compiled in: they are fetched when a page is opened (see
-//! [`AppDetails::screenshot_url`]), so the repository and the binary stay small.
 
 /// One feature: a short name and a sentence.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct Feature {
     pub title: &'static str,
     pub text: &'static str,
-}
-
-/// A screenshot: `key` names the file to fetch (`<app>/<key>.jpg` in the pictures repository).
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
-pub struct Shot {
-    pub key: &'static str,
-    pub caption: &'static str,
-}
-
-const fn shot(key: &'static str, caption: &'static str) -> Shot {
-    Shot { key, caption }
 }
 
 /// The editorial half of an app's page.
@@ -35,33 +21,12 @@ pub struct AppDetails {
     /// One or two paragraphs, separated by a blank line.
     pub about: &'static str,
     pub features: &'static [Feature],
-    /// The first is the lead picture. All are 8:5.
-    pub shots: &'static [Shot],
     /// Where it runs, for display (`"macOS, Windows, Linux, web"`).
     pub platforms: &'static str,
 }
 
 const fn feature(title: &'static str, text: &'static str) -> Feature {
     Feature { title, text }
-}
-
-/// Where the pictures live: one 1200 px wide, 8:5 JPEG per [`Shot`], at `<app>/<key>.jpg`.
-///
-/// Pinned to a tag (`SCREENSHOTS_REV`) so that what a launcher fetches never changes under it, and
-/// so that a saved copy never goes stale. To change a picture, publish a new tag and bump the
-/// revision: older launchers keep working from the tag they know.
-pub const SCREENSHOTS_BASE: &str = "https://raw.githubusercontent.com/storytold/craft-launcher-assets";
-
-/// The tag of the pictures repository the launcher reads. Also part of the saved copies' path.
-pub const SCREENSHOTS_REV: &str = "v1";
-
-/// The largest picture the launcher accepts. The real ones are 60 to 150 KB.
-pub const MAX_SCREENSHOT_BYTES: usize = 2 << 20;
-
-/// True when `bytes` start like a JPEG file. A captive portal's login page, a proxy's error page or
-/// a truncated answer is refused before it is saved or decoded.
-pub fn looks_like_jpeg(bytes: &[u8]) -> bool {
-    bytes.starts_with(&[0xFF, 0xD8, 0xFF])
 }
 
 /// Where every Craft App runs (getartcraft.com lists the same for each of them).
@@ -81,12 +46,6 @@ pub const DETAILS: [AppDetails; 13] = [
             feature("Non-destructive editing", "Adjustment layers, live-preview filters, smart objects and layer styles."),
             feature("On-device selection", "Subject and object selection and mask refinement run locally."),
             feature("Serious color", "8-, 16- and 32-bit RGB, CMYK, Lab and Grayscale, with ICC color management and soft proofing."),
-        ],
-        shots: &[
-            shot("demo", "Curves and type layers"),
-            shot("adjustments", "Levels with a live histogram"),
-            shot("layer-styles", "Layer styles on live type"),
-            shot("masks", "Selections and masked adjustments"),
         ],
         platforms: PLATFORMS,
     },
@@ -109,12 +68,6 @@ pub const DETAILS: [AppDetails; 13] = [
             feature("Image tracing", "Turn raster images into clean vector paths, with presets for the common cases."),
             feature("Open formats", "Native JSON documents, SVG and PDF import and export, and PNG, JPEG and WebP output."),
         ],
-        shots: &[
-            shot("neon", "The Neon Drive poster"),
-            shot("ribbons", "Live blends"),
-            shot("sheet", "A feature sheet and the Layers panel"),
-            shot("bezier", "Pathfinder and exact booleans"),
-        ],
         platforms: PLATFORMS,
     },
     AppDetails {
@@ -133,11 +86,6 @@ pub const DETAILS: [AppDetails; 13] = [
             ),
             feature("Broadcast-ready audio", "EBU R128 loudness meters, a mixer with automation and native audio effects."),
         ],
-        shots: &[
-            shot("color", "The Color workspace, with scopes"),
-            shot("assembly", "The Assembly workspace"),
-            shot("keyframes", "Keyframes in Effect Controls"),
-        ],
         platforms: PLATFORMS,
     },
     AppDetails {
@@ -152,12 +100,6 @@ pub const DETAILS: [AppDetails; 13] = [
             feature("Native raw decoding", "Pure-Rust decoders for the main camera raw formats: DNG, CR2, ARW, NEF, RAF, RW2, PEF and ORF."),
             feature("A library that keeps up", "Albums, ratings, flags and search, with grids that stay smooth on large catalogs."),
             feature("Instant feedback", "The GPU pipeline updates the preview as you move a slider, even on large raw files."),
-        ],
-        shots: &[
-            shot("hero", "The Edit view"),
-            shot("curve", "The tone curve"),
-            shot("grading", "Color grading wheels"),
-            shot("masking", "A radial mask over a sky mask"),
         ],
         platforms: PLATFORMS,
     },
@@ -174,7 +116,6 @@ pub const DETAILS: [AppDetails; 13] = [
             feature("Fearless saves", "Incremental, atomic saves with autosave and crash recovery."),
             feature("Built-in security", "Opens files from RC4 to AES-256 encryption and honors the author's permissions."),
         ],
-        shots: &[],
         platforms: PLATFORMS,
     },
     AppDetails {
@@ -199,12 +140,6 @@ pub const DETAILS: [AppDetails; 13] = [
             feature("Expressions", "JavaScript expressions with wiggle, loops and layer references, edited inline."),
             feature("Export anywhere", "H.264 and ProRes with alpha, PNG, TIFF and EXR sequences, GIF, and Lottie import and export."),
         ],
-        shots: &[
-            shot("hero", "An animated composition"),
-            shot("graph", "The Graph Editor"),
-            shot("effects", "Particles and Effect Controls"),
-            shot("3d", "3D layers with cameras and lights"),
-        ],
         platforms: PLATFORMS,
     },
     AppDetails {
@@ -223,7 +158,6 @@ pub const DETAILS: [AppDetails; 13] = [
             feature("Open formats", "A documented native format, PNG export and layout interchange import and export."),
             feature("Built for automation", "Every menu item, tool, panel and dialog can be driven over a JSON control channel and an MCP server."),
         ],
-        shots: &[shot("spread", "A magazine spread with a threaded story")],
         platforms: PLATFORMS,
     },
     AppDetails {
@@ -248,12 +182,6 @@ pub const DETAILS: [AppDetails; 13] = [
                 "Every action is a command, driven from the ribbon, shortcuts, a command-line tool, a JSON control channel or an MCP server.",
             ),
         ],
-        shots: &[
-            shot("hero", "The Home tab and the Navigation pane"),
-            shot("review", "Track Changes and comments"),
-            shot("design", "The Design tab"),
-            shot("layout", "The Layout tab"),
-        ],
         platforms: "macOS, Windows, Linux, BSD, web",
     },
     AppDetails {
@@ -274,12 +202,6 @@ pub const DETAILS: [AppDetails; 13] = [
                 "Transitions including Morph, animations and motion paths, a full-screen slide show, presenter view and rehearsed timings.",
             ),
             feature("Exchange files", "Opens and saves PowerPoint .pptx and exports PDF (slides, notes pages and handouts), PNG and JPEG."),
-        ],
-        shots: &[
-            shot("editor", "Editing a slide, with sections and notes"),
-            shot("shape", "The Shape Format tab"),
-            shot("sorter", "The slide sorter"),
-            shot("format", "The Format Shape pane"),
         ],
         platforms: "macOS, Windows, Linux, BSD, web",
     },
@@ -308,12 +230,6 @@ pub const DETAILS: [AppDetails; 13] = [
             ),
             feature("Everywhere", "One Rust codebase for the desktop and the web."),
         ],
-        shots: &[
-            shot("hero", "A quarterly sales dashboard"),
-            shot("budget", "A household budget"),
-            shot("pivot", "A pivot table"),
-            shot("chart", "Formatting a chart"),
-        ],
         platforms: "macOS, Windows, Linux, BSD, web",
     },
     AppDetails {
@@ -337,7 +253,6 @@ pub const DETAILS: [AppDetails; 13] = [
             ),
             feature("Built for agents", "Every menu item, tool and prompt is a command, available over MCP, a JSON control channel or the CLI."),
         ],
-        shots: &[shot("apartment", "An apartment floor plan"), shot("bracket", "A mechanical bracket drawing"), shot("layout", "A layout sheet")],
         platforms: PLATFORMS,
     },
     AppDetails {
@@ -363,12 +278,6 @@ pub const DETAILS: [AppDetails; 13] = [
                 "EQ, dynamics, reverbs, modulation effects, a subtractive synth and a drum synth, all original, and CLAP plugins load too.",
             ),
         ],
-        shots: &[
-            shot("edit", "The Edit window with a nine-track session"),
-            shot("mix", "The Mix window"),
-            shot("automation", "Automation and memory locations"),
-            shot("score", "The Score Editor"),
-        ],
         platforms: PLATFORMS,
     },
     AppDetails {
@@ -383,18 +292,11 @@ pub const DETAILS: [AppDetails; 13] = [
             feature("Mixing", "Faders, pan and sends, busses and automation, with built-in EQ, compressor and limiter."),
             feature("Audio files", "WAV, AIFF, FLAC, MP3, Ogg Vorbis and AAC audio files, and bounce to 16, 24 or 32-bit float."),
         ],
-        shots: &[],
         platforms: PLATFORMS,
     },
 ];
 
 impl AppDetails {
-    /// Where the picture `key` of this app is published, or `None` if the page has no such picture.
-    /// The only way to turn a request into an address: callers never build one from their own text.
-    pub fn screenshot_url(&self, key: &str) -> Option<String> {
-        self.shots.iter().find(|s| s.key == key).map(|s| format!("{SCREENSHOTS_BASE}/{SCREENSHOTS_REV}/{}/{}.jpg", self.id, s.key))
-    }
-
     pub fn by_id(id: &str) -> Option<&'static AppDetails> {
         DETAILS.iter().find(|d| d.id == id)
     }
@@ -425,37 +327,6 @@ mod tests {
         for a in &SUITE {
             assert!(AppDetails::by_id(a.id).is_some(), "{}", a.id);
         }
-    }
-
-    #[test]
-    fn picture_addresses_come_only_from_the_pages_own_pictures() {
-        let page = AppDetails::by_id("tlween").unwrap();
-        assert_eq!(
-            page.screenshot_url("demo").as_deref(),
-            Some("https://raw.githubusercontent.com/storytold/craft-launcher-assets/v1/tlween/demo.jpg")
-        );
-        for key in ["", "nope", "../rsm/neon", "demo/../masks", "demo.jpg", "/etc/passwd", "demo?x=1", "demo#"] {
-            assert_eq!(page.screenshot_url(key), None, "{key:?}");
-        }
-        // Every picture of every page has an address of the one shape, with nothing to escape.
-        for d in &DETAILS {
-            for s in d.shots {
-                let url = d.screenshot_url(s.key).unwrap();
-                let path = url.strip_prefix(&format!("{SCREENSHOTS_BASE}/{SCREENSHOTS_REV}/")).unwrap();
-                assert_eq!(path, format!("{}/{}.jpg", d.id, s.key));
-                assert!(path.chars().all(|c| c.is_ascii_lowercase() || c.is_ascii_digit() || matches!(c, '/' | '-' | '.')), "{path}");
-            }
-        }
-    }
-
-    #[test]
-    fn only_jpeg_files_are_accepted() {
-        assert!(looks_like_jpeg(&[0xFF, 0xD8, 0xFF, 0xE0, 0, 0x10]));
-        assert!(!looks_like_jpeg(b""));
-        assert!(!looks_like_jpeg(&[0xFF, 0xD8]));
-        assert!(!looks_like_jpeg(b"<!DOCTYPE html>"));
-        // A PNG's signature.
-        assert!(!looks_like_jpeg(&[0x89, b'P', b'N', b'G', 0x0D, 0x0A, 0x1A, 0x0A]));
     }
 
     #[test]

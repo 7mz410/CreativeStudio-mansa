@@ -103,10 +103,6 @@ pub struct LauncherUi {
     pub(crate) launcher_job: Option<artcraft_launcher_core::protocol::JobPhase>,
     /// The new launcher is in place: quit so it can start.
     restart_requested: bool,
-    /// News from ArtCraft's release feed, shown inline until dismissed.
-    pub(crate) announcements: Vec<artcraft_launcher_core::feed::Notice>,
-    /// Alerts from the feed, shown as popups until acknowledged.
-    pub(crate) alerts: Vec<artcraft_launcher_core::feed::Notice>,
     pub(crate) search: String,
     pub(crate) toasts: Vec<Toast>,
     pub(crate) dialog: Option<Dialog>,
@@ -114,12 +110,6 @@ pub struct LauncherUi {
     pub(crate) detail: Option<String>,
     /// The app the drawer is drawn for: it outlives `detail` while the drawer slides out.
     pub(crate) detail_shown: Option<String>,
-    /// Which screenshot the drawer shows.
-    pub(crate) detail_shot: usize,
-    /// The screenshot is enlarged over the whole window.
-    pub(crate) detail_zoom: bool,
-    /// The details pictures the backend has sent (or been asked for), by app and picture key.
-    pub(crate) pictures: std::collections::HashMap<(String, String), crate::details::Picture>,
     started: bool,
     applied_theme: Option<theme::ThemeChoice>,
     /// The OS asks for fewer animations: what the host last said, and the context's time to ask
@@ -178,16 +168,11 @@ impl LauncherUi {
             launcher_update: None,
             launcher_job: None,
             restart_requested: false,
-            announcements: Vec::new(),
-            alerts: Vec::new(),
             search: String::new(),
             toasts: Vec::new(),
             dialog: None,
             detail: None,
             detail_shown: None,
-            detail_shot: 0,
-            detail_zoom: false,
-            pictures: std::collections::HashMap::new(),
             started: false,
             applied_theme: None,
             reduce_motion: false,
@@ -325,10 +310,6 @@ impl LauncherUi {
                 }
                 true
             }
-            Event::Screenshot { app, key, result } => {
-                self.pictures.insert((app, key), crate::details::Picture::from_result(result));
-                true
-            }
             Event::Detected { app, installed } => {
                 if let Some(e) = self.entry_mut(&app) {
                     e.installed = installed;
@@ -349,11 +330,6 @@ impl LauncherUi {
             }
             Event::LauncherRestarting => {
                 self.restart_requested = true;
-                false
-            }
-            Event::Notices { announcements, alerts } => {
-                self.announcements = announcements;
-                self.alerts = alerts;
                 false
             }
             Event::Paused { app, download } => {
@@ -491,6 +467,9 @@ impl LauncherUi {
         // Set the current language for this frame based on settings.
         let lang = effective_lang(&self.settings.language);
         set_current(lang);
+        // Creative Studio: Arabic lays the interface out right to left (studio/RTL.md). Process-wide,
+        // so unit tests leave it off; tests/rtl.rs and the Arabic UI test cover it in their own process.
+        egui::set_rtl(crate::i18n::bidi::RTL_CODES.contains(&lang.code()));
         // `effective_lang` only picks a CJK language once its font has loaded.
         if lang.needs_cjk_font() && self.cjk_font != Some(lang) {
             theme::install_fonts(&ctx, Some(lang));
@@ -617,27 +596,12 @@ impl LauncherUi {
         list.into_iter().map(|(_, e)| e.app.id).collect()
     }
 
-    /// "ArtCraft API", "GitHub" or "ArtCraft API and GitHub": the services behind the releases on
-    /// screen right now. `None` until something has loaded.
+    /// "GitHub" once a release on screen came from it: the service behind the releases shown.
     pub(crate) fn sources_label(&self) -> Option<String> {
         use artcraft_launcher_core::protocol::Origin;
-        let mut api = false;
-        let mut github = false;
-        for e in &self.entries {
-            if matches!(e.latest, Some(LatestRelease::Found(_) | LatestRelease::None)) {
-                match e.origin {
-                    Some(Origin::ArtCraftApi) => api = true,
-                    Some(Origin::GitHub) => github = true,
-                    None => {}
-                }
-            }
-        }
-        match (api, github) {
-            (true, true) => Some(crate::i18n::fmt(tl!("{a} and {b}"), &[("a", Origin::ArtCraftApi.label()), ("b", Origin::GitHub.label())])),
-            (true, false) => Some(Origin::ArtCraftApi.label().to_string()),
-            (false, true) => Some(Origin::GitHub.label().to_string()),
-            (false, false) => None,
-        }
+        let github =
+            self.entries.iter().any(|e| matches!(e.latest, Some(LatestRelease::Found(_) | LatestRelease::None)) && e.origin == Some(Origin::GitHub));
+        github.then(|| Origin::GitHub.label().to_string())
     }
 
     pub(crate) fn count(&self, filter: Filter) -> usize {

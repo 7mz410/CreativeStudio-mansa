@@ -209,11 +209,6 @@ pub const SUITE: [CraftApp; 13] = [
 
 /// Creative Studio's website.
 pub const WEBSITE_URL: &str = "https://studio.creative.ps";
-/// The GitHub account every Craft App's repository lives under: the only one the launcher
-/// installs from, whatever the release feed says.
-pub const GITHUB_OWNER: &str = "storytold";
-/// Creative Studio's GitHub account: the forks of the Craft apps live under it.
-pub const CREATIVE_STUDIO_OWNER: &str = "7mz410";
 /// ArtCraft on GitHub: every Craft App's source.
 pub const GITHUB_URL: &str = "https://github.com/7mz410";
 /// Creative Studio's social accounts: none yet, so no icons are shown.

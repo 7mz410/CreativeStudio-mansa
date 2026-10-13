@@ -83,7 +83,7 @@ impl LauncherUi {
             egui::Image::new(crate::icons::mansa_logo(t.dark))
                 .alt_text(tl!("Creative Studio"))
                 .paint_at(ui, Rect::from_center_size(cell.center(), logo));
-            ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
+            ui.with_layout(far_layout(), |ui| {
                 if bar == TitleBar::Custom {
                     widgets::window_buttons(ui, h);
                 }
@@ -107,7 +107,7 @@ impl LauncherUi {
                 ui.add_space(6.0);
                 widgets::rule(ui, h);
                 // The controls reserve their actual widths before the secondary text gets space.
-                ui.with_layout(egui::Layout::left_to_right(egui::Align::Center), |ui| {
+                ui.with_layout(near_layout(), |ui| {
                     let tag_width =
                         widgets::caps(ui, tl!("Launcher"), theme::HUD_SIZE, theme::mono_bold(), theme::HUD_SPACING, t.ink).size().x + 16.0;
                     if ui.available_width() >= 17.0 + tag_width {
@@ -145,7 +145,7 @@ impl LauncherUi {
                                 .family(theme::medium())
                                 .color(t.ink_strong),
                         );
-                        ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
+                        ui.with_layout(far_layout(), |ui| {
                             if let Some(phase) = self.launcher_job {
                                 let (fraction, caption) = match phase {
                                     JobPhase::Downloading { done, total } if total > 0 => (
@@ -194,7 +194,6 @@ impl LauncherUi {
                 });
             ui.add_space(14.0);
         }
-        self.announcements(ui);
         ui.horizontal(|ui| {
             let updates = self.count(Filter::Updates);
             let mut filters = vec![
@@ -211,7 +210,7 @@ impl LauncherUi {
             let filters: Vec<(Filter, Cell<'_>)> =
                 filters.into_iter().map(|(f, label, tip, highlight)| (f, Cell { label, tip, count: Some((self.count(f), highlight)) })).collect();
             widgets::cells(ui, &mut self.settings.filter, &filters);
-            ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
+            ui.with_layout(far_layout(), |ui| {
                 if self.caps.manage_apps && updates > 0 {
                     let label = if updates == 1 {
                         tl!("Update 1 app").to_string()
@@ -257,37 +256,6 @@ impl LauncherUi {
         });
     }
 
-    /// News from ArtCraft's release feed (and app renames), until the user dismisses each.
-    fn announcements(&mut self, ui: &mut Ui) {
-        let t = Tokens::get(ui.ctx());
-        let shown: Vec<artcraft_launcher_core::feed::Notice> =
-            self.announcements.iter().filter(|n| !self.settings.dismissed_notices.contains(&n.id)).take(3).cloned().collect();
-        for notice in shown {
-            egui::Frame::new().fill(t.sunken).stroke(t.hairline()).inner_margin(egui::Margin::symmetric(14, 10)).show(ui, |ui| {
-                ui.horizontal(|ui| {
-                    ui.with_layout(egui::Layout::right_to_left(egui::Align::Min), |ui| {
-                        if widgets::glyph_button(ui, widgets::Glyph::Close, tl!("Dismiss")).clicked() {
-                            self.settings.dismissed_notices.insert(notice.id.clone());
-                        }
-                        if let Some(link) = &notice.link {
-                            widgets::hud_link(ui, tl!("Learn more"), link);
-                        }
-                        ui.with_layout(egui::Layout::top_down(egui::Align::Min), |ui| {
-                            ui.spacing_mut().item_spacing.y = 2.0;
-                            if !notice.title.is_empty() {
-                                ui.label(RichText::new(&notice.title).family(theme::semibold()).color(t.ink_strong));
-                            }
-                            if !notice.body.is_empty() {
-                                ui.add(egui::Label::new(RichText::new(&notice.body).color(t.muted)).wrap());
-                            }
-                        });
-                    });
-                });
-            });
-            ui.add_space(8.0);
-        }
-    }
-
     pub(crate) fn footer(&mut self, ui: &mut Ui) {
         let t = Tokens::get(ui.ctx());
         let now = self.backend.now();
@@ -327,7 +295,7 @@ impl LauncherUi {
         let platform_w = widgets::hud_galley(ui, &platform, t.faint).size().x + 16.0 + spacing;
         let left_w = ui.available_width() - icons_w - 12.0 - links_w - 16.0 - 3.0 * spacing;
         let show_platform = left_w - platform_w >= FOOTER_MIN_STATUS_W;
-        ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
+        ui.with_layout(far_layout(), |ui| {
             if show_platform {
                 widgets::hud(ui, &platform, t.faint);
                 ui.add_space(16.0);
@@ -345,7 +313,7 @@ impl LauncherUi {
                 }
             });
             ui.add_space(16.0);
-            ui.with_layout(egui::Layout::left_to_right(egui::Align::Center), |ui| {
+            ui.with_layout(near_layout(), |ui| {
                 // While GitHub is rate limited, saying so matters more than when we last checked.
                 let avail = ui.available_width();
                 let text = |s: &str| RichText::new(s).size(12.0).color(t.warn);
@@ -419,11 +387,9 @@ impl LauncherUi {
         painter.hline(strip.x_range(), strip.bottom() - 0.5, t.hairline());
         let number = SUITE.iter().position(|a| a.id == app.id).map_or_else(String::new, |i| format!("{:02}", i + 1));
         {
-            let mut strip_ui = ui.new_child(
-                egui::UiBuilder::new().max_rect(strip.shrink2(vec2(CARD_PAD, 0.0))).layout(egui::Layout::left_to_right(egui::Align::Center)),
-            );
+            let mut strip_ui = ui.new_child(egui::UiBuilder::new().max_rect(strip.shrink2(vec2(CARD_PAD, 0.0))).layout(near_layout()));
             widgets::tag(&mut strip_ui, &number, app_color, Color32::BLACK);
-            strip_ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
+            strip_ui.with_layout(far_layout(), |ui| {
                 ui.spacing_mut().item_spacing.x = 16.0;
                 widgets::hud_link(ui, tl!("GitHub"), &app.repo_url());
                 widgets::hud_link(ui, tl!("Website"), &app.website());
@@ -433,7 +399,7 @@ impl LauncherUi {
         let status = entry.status(self.platform, self.caps.manage_apps);
         let inner = Rect::from_min_max(egui::pos2(rect.left() + CARD_PAD, strip.bottom() + 18.0), rect.max - vec2(CARD_PAD, CARD_PAD));
         // A detached child: the card's contents never move the next card along.
-        let mut child = ui.new_child(egui::UiBuilder::new().max_rect(inner).layout(egui::Layout::top_down(egui::Align::Min)));
+        let mut child = ui.new_child(egui::UiBuilder::new().max_rect(inner).layout(egui::Layout::top_down(start_align())));
         child.set_clip_rect(rect.intersect(ui.clip_rect()));
         let ui = &mut child;
         ui.horizontal(|ui| {
@@ -476,7 +442,7 @@ impl LauncherUi {
         });
         ui.add_space(4.0);
         ui.label(RichText::new(version_line(&entry, &status)).size(12.5).color(t.muted));
-        ui.with_layout(egui::Layout::bottom_up(egui::Align::Min), |ui| {
+        ui.with_layout(egui::Layout::bottom_up(start_align()), |ui| {
             ui.horizontal(|ui| self.actions(ui, &entry, &status, inner.width()));
         });
     }
@@ -890,6 +856,20 @@ impl LauncherUi {
     }
 }
 
+/// Arabic lays the interface out right to left (studio/RTL.md): the side a list ends on, and the
+/// side it starts from, swap; so do the cross alignments of top-down layouts.
+pub(crate) fn far_layout() -> egui::Layout {
+    if egui::is_rtl() { egui::Layout::left_to_right(egui::Align::Center) } else { egui::Layout::right_to_left(egui::Align::Center) }
+}
+
+pub(crate) fn near_layout() -> egui::Layout {
+    if egui::is_rtl() { egui::Layout::right_to_left(egui::Align::Center) } else { egui::Layout::left_to_right(egui::Align::Center) }
+}
+
+pub(crate) fn start_align() -> egui::Align {
+    if egui::is_rtl() { egui::Align::Max } else { egui::Align::Min }
+}
+
 fn sort_label(k: SortKey) -> &'static str {
     match k {
         SortKey::Suite => tl!("Suite order"),
@@ -936,7 +916,7 @@ pub(crate) fn launcher_download(r: &artcraft_launcher_core::Release, p: artcraft
 /// Each line is measured as an empty galley, which is rounded to the pixel like a label, unlike `Fonts::row_height`.
 fn centered_lines(ui: &mut Ui, fonts: &[&FontId], gap: f32, add_contents: impl FnOnce(&mut Ui)) {
     let height = lines_height(ui, fonts, gap);
-    ui.allocate_ui_with_layout(vec2(ui.available_width(), height), egui::Layout::top_down(egui::Align::Min), |ui| {
+    ui.allocate_ui_with_layout(vec2(ui.available_width(), height), egui::Layout::top_down(start_align()), |ui| {
         ui.spacing_mut().item_spacing.y = gap;
         add_contents(ui);
     });

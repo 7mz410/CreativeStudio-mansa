@@ -58,8 +58,6 @@ struct Shared {
     answered: Mutex<std::collections::HashSet<String>>,
     /// Every app has had an answer at least once: from then on GitHub is asked sparingly.
     loaded: AtomicBool,
-    /// Apps whose details pictures are on their way (a second request meanwhile does nothing).
-    pictures_busy: Mutex<std::collections::HashSet<&'static str>>,
 }
 
 impl Shared {
@@ -111,7 +109,6 @@ impl NativeBackend {
             github_asked: Mutex::new(HashMap::new()),
             answered: Mutex::new(std::collections::HashSet::new()),
             loaded: AtomicBool::new(false),
-            pictures_busy: Mutex::new(std::collections::HashSet::new()),
             last_check: Mutex::new(None),
         });
         let backend = Self { shared, paths, http, source, platform: native_platform(), self_install: crate::self_update::current() };
@@ -580,8 +577,8 @@ fn latest_for(
 }
 
 /// Until when the footer says GitHub's limit holds details back: only while it does, that is
-/// when this check had to settle for the release pages or saved answers. When the feed (or the
-/// API itself) answered everything, nothing is missing, however recently GitHub said no.
+/// when this check had to settle for the release pages or saved answers. When the API itself
+/// answered everything, nothing is missing, however recently GitHub said no.
 fn limit_notice(source_used: Source, limited_until: Option<i64>) -> Option<i64> {
     limited_until.filter(|_| matches!(source_used, Source::GitHubPages | Source::Cache))
 }
@@ -599,36 +596,6 @@ fn native_platform() -> Option<Platform> {
         }
     }
     Some(p)
-}
-
-/// Clears an app's "pictures on their way" mark when the thread fetching them ends, panic or not.
-struct PicturesBusy {
-    shared: Arc<Shared>,
-    app: &'static str,
-}
-
-impl Drop for PicturesBusy {
-    fn drop(&mut self) {
-        self.shared.pictures_busy.lock().unwrap_or_else(PoisonError::into_inner).remove(self.app);
-    }
-}
-
-impl NativeBackend {
-    /// Starts fetching the pictures of an app's details page, unless they are already on their way.
-    /// An app without a page, or a name that isn't an app, is ignored.
-    fn fetch_screenshots(&self, app: &str) {
-        let Some(details) = artcraft_launcher_core::details::AppDetails::by_id(app) else { return };
-        if !self.shared.pictures_busy.lock().unwrap_or_else(PoisonError::into_inner).insert(details.id) {
-            return;
-        }
-        let (shared, http, paths) = (self.shared.clone(), self.http.clone(), self.paths.clone());
-        std::thread::spawn(move || {
-            let _busy = PicturesBusy { shared: shared.clone(), app: details.id };
-            crate::screenshots::fetch_all(http.as_ref(), &paths, details, |key, result| {
-                shared.emit(Event::Screenshot { app: details.id.to_string(), key: key.to_string(), result });
-            });
-        });
-    }
 }
 
 impl Backend for NativeBackend {
@@ -679,7 +646,6 @@ impl Backend for NativeBackend {
                 }
             }
             Command::UpdateLauncher => self.update_launcher(),
-            Command::FetchScreenshots { app } => self.fetch_screenshots(&app),
             Command::Configure(options) => {
                 let changed_pre = {
                     let mut o = self.shared.options.lock().unwrap_or_else(PoisonError::into_inner);
@@ -777,7 +743,6 @@ mod tests {
             github_asked: Mutex::new(HashMap::new()),
             answered: Mutex::new(std::collections::HashSet::new()),
             loaded: AtomicBool::new(false),
-            pictures_busy: Mutex::new(std::collections::HashSet::new()),
         }
     }
 

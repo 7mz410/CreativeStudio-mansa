@@ -913,7 +913,7 @@ mod tests {
         // A check finishes in the same tick as the user quits from the tray.
         seen.news.lock().unwrap_or_else(PoisonError::into_inner).push(Event::CheckFinished {
             at: NOW - 5,
-            source: Source::Feed,
+            source: Source::GitHubApi,
             rate_limited_until: None,
         });
         launcher.host.quit();

@@ -106,8 +106,6 @@ pub struct Settings {
     pub prereleases: bool,
     /// Linux: the package format to prefer for new installs (empty: the system's own).
     pub preferred_kinds: Vec<PackageKind>,
-    /// Announcements and alerts from the release feed the user dismissed (by notice id).
-    pub dismissed_notices: std::collections::BTreeSet<String>,
     /// Updates already announced, so each version is announced once: app id → version.
     pub notified: BTreeMap<String, String>,
     /// Unix seconds of the last finished check.
@@ -182,7 +180,6 @@ impl Default for Settings {
             notify: true,
             prereleases: false,
             preferred_kinds: default_preferred_kinds(),
-            dismissed_notices: std::collections::BTreeSet::new(),
             notified: BTreeMap::new(),
             last_check: None,
             hidden: std::collections::BTreeSet::new(),
