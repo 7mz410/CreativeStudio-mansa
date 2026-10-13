@@ -188,10 +188,18 @@ fn complete_catalogs_translate_every_tagline() {
 #[test]
 fn product_names_stay_in_english() {
     for lang in Lang::all() {
-        for name in ["Mansa", "Creative Studio suite"] {
-            assert_eq!(tr(lang, name), name, "{}", lang.code());
+        // Arabic shows the launcher's Arabic name instead (see the next test).
+        let names: &[&str] = if lang.code() == "ar" { &["Creative Studio suite"] } else { &["Mansa", "Creative Studio suite"] };
+        for name in names {
+            assert_eq!(tr(lang, name), *name, "{}", lang.code());
         }
     }
+}
+
+#[test]
+fn arabic_shows_the_arabic_launcher_name() {
+    let ar = Lang::all().find(|l| l.code() == "ar").unwrap();
+    assert_eq!(tr(ar, "Mansa"), "المنصّة");
 }
 
 #[test]

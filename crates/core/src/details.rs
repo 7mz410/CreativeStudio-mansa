@@ -67,7 +67,7 @@ pub fn looks_like_jpeg(bytes: &[u8]) -> bool {
 /// Where every Craft App runs (getartcraft.com lists the same for each of them).
 const PLATFORMS: &str = "macOS, Windows, Linux, FreeBSD, web";
 
-pub const DETAILS: [AppDetails; 12] = [
+pub const DETAILS: [AppDetails; 13] = [
     AppDetails {
         id: "tlween",
         headline: "The image editor you already know how to use.",
@@ -369,6 +369,21 @@ pub const DETAILS: [AppDetails; 12] = [
             shot("automation", "Automation and memory locations"),
             shot("score", "The Score Editor"),
         ],
+        platforms: PLATFORMS,
+    },
+    AppDetails {
+        id: "aswat",
+        headline: "Audio recording and editing, free and open source.",
+        about: "A native audio editor for recording, arranging and mixing: multitrack editing, \
+                automation, plugins and bounce to WAV, AIFF or FLAC. Built on SoundCraft.\n\n\
+                aswat keeps the editing tools and shortcuts of a studio editor in one app that runs offline.",
+        features: &[
+            feature("Recording", "Punch in on a selection or on the fly, with pre-roll and loop recording."),
+            feature("Editing", "Shuffle, Slip, Spot and Grid modes, with the usual selection, trim and pencil tools."),
+            feature("Mixing", "Faders, pan and sends, busses and automation, with built-in EQ, compressor and limiter."),
+            feature("Audio files", "WAV, AIFF, FLAC, MP3, Ogg Vorbis and AAC audio files, and bounce to 16, 24 or 32-bit float."),
+        ],
+        shots: &[],
         platforms: PLATFORMS,
     },
 ];

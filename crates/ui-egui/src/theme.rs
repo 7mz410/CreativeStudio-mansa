@@ -274,6 +274,8 @@ pub fn install_fonts(ctx: &egui::Context, cjk: Option<Lang>) {
     const INTER: &[u8] = include_bytes!("../../../assets/fonts/Inter-Variable.ttf");
     const ARCHIVO: &[u8] = include_bytes!("../../../assets/fonts/Archivo-Variable.ttf");
     const GEIST_MONO: &[u8] = include_bytes!("../../../assets/fonts/GeistMono-Variable.ttf");
+    // Arabic letters: none of the faces above have them. Behind ours, before egui's.
+    const ARABIC: &[u8] = include_bytes!("../../../assets/fonts/IBMPlexSansArabic-Regular.ttf");
     let mut fonts = FontDefinitions::default();
     // egui's own fonts stay behind ours, for symbols and emoji ours don't have.
     let fallback: Vec<String> = fonts.families.get(&FontFamily::Proportional).cloned().unwrap_or_default();
@@ -286,10 +288,11 @@ pub fn install_fonts(ctx: &egui::Context, cjk: Option<Lang>) {
         ("GeistMono-Medium", GEIST_MONO, &[(*b"wght", 500.0)], mono()),
         ("GeistMono-Bold", GEIST_MONO, &[(*b"wght", 700.0)], mono_bold()),
     ];
+    fonts.font_data.insert("IBMPlexSansArabic".to_owned(), Arc::new(FontData::from_static(ARABIC)));
     for (name, bytes, coords, family) in faces {
         let tweak = FontTweak { coords: VariationCoords::new(coords.iter().copied()), ..Default::default() };
         fonts.font_data.insert(name.to_owned(), Arc::new(FontData::from_static(bytes).tweak(tweak)));
-        let mut stack = vec![name.to_owned()];
+        let mut stack = vec![name.to_owned(), "IBMPlexSansArabic".to_owned()];
         stack.extend(fallback.iter().cloned());
         fonts.families.insert(family, stack);
     }

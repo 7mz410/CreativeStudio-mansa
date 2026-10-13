@@ -264,6 +264,28 @@ mod tests {
     }
 
     #[test]
+    fn reads_the_creative_studio_release_names() {
+        // What the Creative Studio forks publish (SHA256SUMS.txt beside them).
+        let names = ["rsm-0.0.1-test-macos-aarch64.dmg", "rsm-0.0.1-test-windows-x64-portable.zip", "rsm-0.0.1-test-linux-x86_64.tar.gz"];
+        for name in names {
+            let n = parse_asset_name(name, &["rsm"]).unwrap();
+            assert_eq!((n.stem.as_str(), n.version.as_str()), ("rsm", "0.0.1-test"), "{name}");
+        }
+        let mac = parse_asset_name(names[0], &["rsm"]).unwrap();
+        let win = parse_asset_name(names[1], &["rsm"]).unwrap();
+        let linux = parse_asset_name(names[2], &["rsm"]).unwrap();
+        assert_eq!((mac.token.as_str(), mac.kind), ("macos-aarch64", PackageKind::Dmg));
+        assert_eq!((win.token.as_str(), win.kind), ("windows-x64", PackageKind::PortableZip));
+        assert_eq!((linux.token.as_str(), linux.kind), ("linux-x86_64", PackageKind::TarGz));
+        let r = release(&names);
+        let stems = ["rsm"];
+        let pick = |os, arch, kind| pick_asset(&r, &stems, Platform { os, arch }, &[kind]).map(|(a, _)| a.name.clone());
+        assert_eq!(pick(Os::MacOs, Arch::Arm64, PackageKind::Dmg).as_deref(), Some(names[0]));
+        assert_eq!(pick(Os::Windows, Arch::X64, PackageKind::PortableZip).as_deref(), Some(names[1]));
+        assert_eq!(pick(Os::Linux, Arch::X64, PackageKind::TarGz).as_deref(), Some(names[2]));
+    }
+
+    #[test]
     fn picks_the_native_build_first_and_falls_back_to_emulation() {
         let r = release(PHOTO);
         let pick = |os, arch, kinds: &[PackageKind]| pick_asset(&r, &["tlween"], Platform { os, arch }, kinds).map(|(a, _)| a.name.clone());

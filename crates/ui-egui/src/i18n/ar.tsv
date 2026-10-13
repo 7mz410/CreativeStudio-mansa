@@ -62,7 +62,7 @@
 	Reinstall	إعادة التثبيت
 	Uninstall…	إلغاء التثبيت…
 	All releases	كل الإصدارات
-	Mansa {version} is available.	Mansa {version} متاحة.
+	Mansa {version} is available.	المنصّة {version} متاحة.
 	Dismiss	إغلاق
 	Update and restart	تحديث وإعادة التشغيل
 	A new version is available. Would you like to relaunch with the updated version?	إصدار جديد متاح. هل تريد إعادة التشغيل بالنسخة المحدَّثة؟
@@ -72,7 +72,7 @@
 	Released {date}	صدر في {date}
 	Open on GitHub	فتح على GitHub
 	Close	إغلاق
-	Mansa {version}	Mansa {version}
+	Mansa {version}	المنصّة {version}
 	Only when I ask	عند الطلب فقط
 	Automatically download and install updates	تنزيل التحديثات وتثبيتها تلقائياً
 	Notify me when an installed app has an update	إشعاري عند توفر تحديث لتطبيق مثبّت
@@ -84,11 +84,11 @@
 	Running in the background	العمل في الخلفية
 	Keep running in the tray when the window is closed	البقاء في شريط الإشعارات عند إغلاق النافذة
 	Show the window on the current desktop	إظهار النافذة على سطح المكتب الحالي
-	Start Mansa when I log in	تشغيل Mansa عند تسجيل الدخول
+	Start Mansa when I log in	تشغيل المنصّة عند تسجيل الدخول
 	Community	المجتمع
 	Questions, ideas and news from the Creative Studio team	أسئلة وأفكار وأخبار من فريق Creative Studio
 	Appearance	المظهر
-	Quit Mansa	إنهاء Mansa
+	Quit Mansa	إنهاء المنصّة
 	Done	تم
 	Uninstall {name}?	إلغاء تثبيت {name}؟
 	The app will be moved to the Trash. Your documents and settings stay.	سيُنقل التطبيق إلى سلة المهملات. ستبقى مستنداتك وإعداداتك.
@@ -121,7 +121,7 @@
 	Open link	فتح الرابط
 	Update	تحديث
 	{name} icon	أيقونة {name}
-	Loading Mansa…	جارٍ تحميل Mansa…
+	Loading Mansa…	جارٍ تحميل المنصّة…
 	Cancel update	إلغاء التحديث
 	Stop waiting; the update can be started again later	إيقاف الانتظار؛ يمكن بدء التحديث لاحقاً
 	Download again	إعادة التنزيل
@@ -153,6 +153,7 @@ klmat	Writing and document design	الكتابة وتصميم المستندات
 arqam	Spreadsheets and data	الجداول الإلكترونية والبيانات
 muhandes	Computer-aided design and drafting	التصميم بمساعدة الحاسوب والرسم الهندسي
 7rrek	Motion and animation	الحركة والرسوم المتحركة
+aswat	Audio recording and editing	تسجيل الصوت وتحريره
 month	Jan	يناير
 month	Feb	فبراير
 month	Mar	مارس
@@ -191,7 +192,7 @@ month	Dec	ديسمبر
 	Version {version} installed	الإصدار {version} مثبّت
 	Version {latest}	الإصدار {latest}
 	No release published yet	لم يُنشر أي إصدار بعد
-	Mansa	Mansa
+	Mansa	المنصّة
 	App	التطبيق
 	Latest	الأحدث
 	Released	تاريخ الإصدار
@@ -224,7 +225,7 @@ month	Dec	ديسمبر
 	Full changelog	سجل التغييرات الكامل
 	link	رابط
 	No apps match	لا توجد تطبيقات مطابقة
-	Open Mansa to update.	افتح Mansa للتحديث.
+	Open Mansa to update.	افتح المنصّة للتحديث.
 	{name} {v} is available	يتوفر {name} {v}
 	{count} updates are available	يتوفر {count} تحديثات
 	These notes weren't fetched (GitHub's request limit was reached). They're on the release page.	لم تُحمَّل هذه الملاحظات (بلغ GitHub حد الطلبات). وهي موجودة في صفحة الإصدار.
@@ -264,7 +265,7 @@ filter	Installed	المثبّتة
 @id	launcher.notes	ما الجديد
 @id	launcher.dismiss	إغلاق
 @id	settings.open	الإعدادات
-@id	settings.quit	إنهاء Mansa
+@id	settings.quit	إنهاء المنصّة
 @id	view.grid	شبكة
 @id	view.table	جدول
 @id	filter.all	الكل
@@ -287,9 +288,9 @@ filter	Installed	المثبّتة
 @id	linux.preferred_kind	تثبيت التطبيقات الجديدة كـ
 @id	tray.close_to_tray	البقاء في شريط الإشعارات عند إغلاق النافذة
 @id	tray.show_on_current_desktop	إظهار النافذة على سطح المكتب الحالي
-@id	tray.login_item	تشغيل Mansa عند تسجيل الدخول
+@id	tray.login_item	تشغيل المنصّة عند تسجيل الدخول
 @id	appearance.theme	المظهر
-	Show Mansa	إظهار Mansa
+	Show Mansa	إظهار المنصّة
 	Check for Updates	التحقق من التحديثات
 	Visit studio.creative.ps	زيارة studio.creative.ps
 	Creative Studio on GitHub	Creative Studio على GitHub
@@ -306,4 +307,4 @@ filter	Installed	المثبّتة
 	Next picture (→)	الصورة التالية (→)
 	Loading pictures…	جارٍ تحميل الصور…
 	Pictures couldn't be loaded. Reopen this page to try again.	تعذّر تحميل الصور. أعد فتح هذه الصفحة للمحاولة مرة أخرى.
-@plural	Mansa · {n} update available|Mansa · {n} updates available	Mansa · {n} تحديث متاح|Mansa · {n} تحديثات متاحة
+@plural	Mansa · {n} update available|Mansa · {n} updates available	المنصّة · {n} تحديث متاح|المنصّة · {n} تحديثات متاحة

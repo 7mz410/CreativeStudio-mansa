@@ -1,10 +1,7 @@
 //! Where release information comes from.
 //!
-//! [`GitHubSource`] asks the GitHub REST API (one request per app, revalidated with ETags) and,
-//! when the API is out of quota, falls back to github.com's release pages: the
-//! `releases/latest` redirect names the tag and `SHA256SUMS.txt` lists every file with its
-//! checksum, which costs no API quota at all. A later [`ReleaseSource`] will ask the ArtCraft
-//! catalog API for every app in one request.
+//! [`GitHubSource`] asks the GitHub REST API only (one request per app, revalidated with ETags).
+//! When the API is out of quota or unreachable, the last saved answer is shown instead.
 
 use std::collections::BTreeMap;
 use std::sync::{Mutex, PoisonError};
@@ -110,25 +107,6 @@ impl GitHubSource {
             }
         }
     }
-
-    /// The quota-free route through github.com (stable releases only).
-    fn ask_pages(&self, repo: &str) -> Result<Answer, String> {
-        let location = self.http.redirect_target(&format!("https://github.com/{repo}/releases/latest"))?;
-        let Some(tag) = location.as_deref().and_then(|l| release::tag_from_redirect(l, repo)) else {
-            // No published release: github.com sends us to the release list instead.
-            return Ok(Answer { latest: LatestRelease::None, source: Source::GitHubPages });
-        };
-        if let Some(e) = self.entry(repo, false)
-            && let Some(r) = e.release.as_ref().filter(|r| r.tag == tag)
-        {
-            return Ok(Answer { latest: LatestRelease::Found(r.clone()), source: Source::GitHubPages });
-        }
-        let sums_url = format!("{}{tag}/SHA256SUMS.txt", release::download_prefix(repo));
-        let sums = self.http.get_text(&sums_url)?.map(|t| release::parse_sha256sums(&t)).unwrap_or_default();
-        let r = release::release_from_sums(repo, &tag, &sums);
-        self.store(repo, Entry { etag: None, release: Some(r.clone()), prereleases: false, fetched_at: crate::now() });
-        Ok(Answer { latest: LatestRelease::Found(r), source: Source::GitHubPages })
-    }
 }
 
 impl ReleaseSource for GitHubSource {
@@ -142,12 +120,6 @@ impl ReleaseSource for GitHubSource {
                 Err(e) => Some(e),
             }
         };
-        if !prereleases && api_error.is_none() {
-            match self.ask_pages(repo) {
-                Ok(answer) => return answer,
-                Err(e) => log::warn!("{repo}: release pages: {e}"),
-            }
-        }
         let why = api_error.unwrap_or_else(|| "GitHub's request limit was reached".into());
         match self.cached(repo, prereleases) {
             Some(latest) => Answer { latest, source: Source::Cache },

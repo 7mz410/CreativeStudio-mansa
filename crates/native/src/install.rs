@@ -746,6 +746,7 @@ pub(crate) mod linux {
             "arqam" => include_bytes!("../../../assets/app-icons/arqam.png"),
             "muhandes" => include_bytes!("../../../assets/app-icons/muhandes.png"),
             "7rrek" => include_bytes!("../../../assets/app-icons/7rrek.png"),
+            "aswat" => include_bytes!("../../../assets/app-icons/aswat.png"),
             _ => return None,
         })
     }
@@ -1301,7 +1302,10 @@ mod tests {
         let app = CraftApp::by_id("klmat").unwrap();
         let dir = tempfile::tempdir().unwrap();
         let tree_style = dir.path().join("tree.tar.gz");
-        tarball(&tree_style, &["klmat-0.3.0-freebsd-x86_64/bin/klmat", "klmat-0.3.0-freebsd-x86_64/share/applications/ai.storyteller.klmat.desktop"]);
+        tarball(
+            &tree_style,
+            &["klmat-0.3.0-freebsd-x86_64/bin/klmat", "klmat-0.3.0-freebsd-x86_64/share/applications/ps.creative.studio.klmat.desktop"],
+        );
         let flat_style = dir.path().join("flat.tar.gz");
         tarball(
             &flat_style,
@@ -1309,15 +1313,15 @@ mod tests {
                 "klmat-0.3.0-freebsd-x86_64/klmat",
                 "klmat-0.3.0-freebsd-x86_64/klmat-cli",
                 "klmat-0.3.0-freebsd-x86_64/README.md",
-                "klmat-0.3.0-freebsd-x86_64/ai.storyteller.klmat.desktop",
-                "klmat-0.3.0-freebsd-x86_64/ai.storyteller.klmat.png",
+                "klmat-0.3.0-freebsd-x86_64/ps.creative.studio.klmat.desktop",
+                "klmat-0.3.0-freebsd-x86_64/ps.creative.studio.klmat.png",
             ],
         );
         for file in [tree_style, flat_style] {
             let root = tree::unpack(app, &file, &dir.path().join("staging")).unwrap();
             let files = tree::files(&root);
             assert!(files.contains(&PathBuf::from("bin/klmat")), "{files:?}");
-            assert!(files.contains(&PathBuf::from("share/applications/ai.storyteller.klmat.desktop")), "{files:?}");
+            assert!(files.contains(&PathBuf::from("share/applications/ps.creative.studio.klmat.desktop")), "{files:?}");
             assert!(!files.iter().any(|f| f.ends_with("README.md")), "{files:?}");
         }
         let bad = dir.path().join("bad.tar.gz");
@@ -1337,7 +1341,7 @@ mod tests {
             &[
                 "klmat-0.3.0-linux-x86_64/bin/klmat",
                 "klmat-0.3.0-linux-x86_64/bin/klmat-cli",
-                "klmat-0.3.0-linux-x86_64/share/applications/ai.storyteller.klmat.desktop",
+                "klmat-0.3.0-linux-x86_64/share/applications/ps.creative.studio.klmat.desktop",
             ],
         );
 
@@ -1345,7 +1349,7 @@ mod tests {
         let root = paths.apps().join("klmat");
         assert_eq!(bin, root.join("bin").join("klmat"));
         assert!(bin.is_file(), "the app's binary wasn't unpacked");
-        assert!(root.join("share/applications/ai.storyteller.klmat.desktop").is_file(), "share/ wasn't unpacked");
+        assert!(root.join("share/applications/ps.creative.studio.klmat.desktop").is_file(), "share/ wasn't unpacked");
         assert!(!paths.cache.join("klmat.new").exists(), "the staging folder was left behind");
 
         // The app's own home sits beside the tree, and an update keeps it.
@@ -1484,8 +1488,8 @@ mod tests {
         let app = CraftApp::by_id("klmat").unwrap();
         let root = tempfile::tempdir().unwrap();
         let data = root.path().join("share");
-        let desktop = data.join("applications/ai.storyteller.klmat.desktop");
-        let icon = data.join("icons/hicolor/128x128/apps/ai.storyteller.klmat.png");
+        let desktop = data.join("applications/ps.creative.studio.klmat.desktop");
+        let icon = data.join("icons/hicolor/128x128/apps/ps.creative.studio.klmat.png");
         let old = root.path().join("My Apps/klmat-0.2.0-linux-x86_64.AppImage");
         let new = root.path().join("My Apps/klmat-0.3.0-linux-x86_64.AppImage");
         std::fs::create_dir_all(new.parent().unwrap()).unwrap();
@@ -1496,7 +1500,7 @@ mod tests {
         assert_eq!(files, [icon.clone(), desktop.clone()]);
         let text = std::fs::read_to_string(&desktop).unwrap();
         assert!(text.contains("Exec=\"") && text.contains("My Apps/klmat-0.3.0-linux-x86_64.AppImage\" %F\n"), "{text}");
-        assert!(text.contains("Icon=ai.storyteller.klmat\n"));
+        assert!(text.contains("Icon=ps.creative.studio.klmat\n"));
         assert!(std::fs::read(&icon).unwrap().starts_with(b"\x89PNG"));
         let rec = record("0.3.0", PackageKind::AppImage, new.clone(), files, false);
 
@@ -1627,7 +1631,7 @@ mod tests {
                 contents.join("Info.plist"),
                 format!(
                     "<?xml version=\"1.0\" encoding=\"UTF-8\"?><plist version=\"1.0\"><dict>\
-                     <key>CFBundleIdentifier</key><string>ai.storyteller.tlween</string>\
+                     <key>CFBundleIdentifier</key><string>ps.creative.studio.tlween</string>\
                      <key>CFBundleExecutable</key><string>tlween</string>\
                      <key>CFBundleShortVersionString</key><string>{version}</string></dict></plist>"
                 ),

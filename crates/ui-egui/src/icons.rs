@@ -17,6 +17,7 @@ pub fn app(id: &str) -> Option<ImageSource<'static>> {
         "arqam" => egui::include_image!("../../../assets/app-icons/arqam.png"),
         "muhandes" => egui::include_image!("../../../assets/app-icons/muhandes.png"),
         "7rrek" => egui::include_image!("../../../assets/app-icons/7rrek.png"),
+        "aswat" => egui::include_image!("../../../assets/app-icons/aswat.png"),
         _ => return None,
     })
 }
